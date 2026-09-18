@@ -1,7 +1,7 @@
 {
-  "name": "gn33 - Online shop",
-  "short_name": "gn33",
-  "description": "Create a gn33 account to manage your details, your orders and your privacy.",
+  "name": "GN33 Blog",
+  "short_name": "GN33 Blog",
+  "description": "Create a GN33 Blog account to read, write and manage your posts, comments and privacy.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

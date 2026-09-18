@@ -27,7 +27,7 @@ const Logo = ({
           textClassName,
         )}
       >
-        gn33/Shop
+        gn33/Blog
       </span>
     </div>
   );

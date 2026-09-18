@@ -80,7 +80,7 @@ function ExportDataCard() {
     mutate(undefined, {
       onSuccess: (blob) => {
         const today = new Date().toISOString().slice(0, 10);
-        saveBlobAsFile(blob, `gn33-shop-data-export-${today}.zip`);
+        saveBlobAsFile(blob, `gn33-blog-data-export-${today}.zip`);
       },
       onError: () => {
         toast.error(t('exportDataError'));

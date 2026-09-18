@@ -27,7 +27,7 @@ const sendConfigToWorker = async (): Promise<void> => {
   registration.active?.postMessage({
     // Must stay in step with the matching check in public/sw.js: a mismatch makes the worker silently
     // ignore the config, which only shows up much later as a failed pushsubscriptionchange self-heal.
-    type: 'gn33-shop-push-config',
+    type: 'gn33-blog-push-config',
     apiBaseUrl: env.API_URL,
   });
 };

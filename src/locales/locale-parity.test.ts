@@ -9,7 +9,7 @@ import fr from './fr.json';
  * Locks every locale file (en, ro, de, es, fr) together for full key parity. All five became
  * equally maintained on 2026-08-31, when the owner explicitly retired the earlier "only en/ro,
  * de/es/fr are frozen and fall back to English" policy and had de/es/fr backfilled to match en
- * key-for-key - see `gn33-shop-app`'s analogous `MessageBundleParityTest` for the backend side of
+ * key-for-key - see `gn33-blog-app`'s analogous `MessageBundleParityTest` for the backend side of
  * the same change.
  *
  * `en.json` is the source of truth (it's also what `TranslationKey` in `hooks/use-translation.ts`

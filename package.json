@@ -1,11 +1,11 @@
 {
-  "name": "gn33-shop-spa",
+  "name": "gn33-blog-spa",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.17.0",
   "scripts": {
-    "dev": "vite --port 3100",
-    "start": "vite --port 3100",
+    "dev": "vite --port 3200",
+    "start": "vite --port 3200",
     "build": "vite build && tsc",
     "serve": "node server.mjs",
     "test": "vitest run",

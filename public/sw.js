@@ -1,6 +1,6 @@
-// gn33-shop service worker: Web Push notifications only (no offline caching / asset precache in v1).
+// gn33-blog service worker: Web Push notifications only (no offline caching / asset precache in v1).
 
-const CONFIG_CACHE = 'gn33-shop-push-config-v1';
+const CONFIG_CACHE = 'gn33-blog-push-config-v1';
 const CONFIG_KEY = 'config';
 
 async function getConfig() {
@@ -26,7 +26,7 @@ self.addEventListener('activate', (event) => {
 // still reach the backend later, even with no tab open - see the pushsubscriptionchange handler below.
 self.addEventListener('message', (event) => {
   const data = event.data;
-  if (data && data.type === 'gn33-shop-push-config' && data.apiBaseUrl) {
+  if (data && data.type === 'gn33-blog-push-config' && data.apiBaseUrl) {
     event.waitUntil(setConfig({ apiBaseUrl: data.apiBaseUrl }));
   }
 });

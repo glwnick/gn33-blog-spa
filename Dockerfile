@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------
-# gn33-shop-spa production image. Built once, configured at runtime, served non-root.
-# Built and published by .github/workflows/release.yml. There is no deploy repo for the shop yet, so
+# gn33-blog-spa production image. Built once, configured at runtime, served non-root.
+# Built and published by .github/workflows/release.yml. There is no deploy repo for the blog yet, so
 # nothing in version control describes how this image is run in production.
 #
 # Serves via a plain Node process rather than nginx: since the TanStack Start migration, the build
@@ -36,7 +36,7 @@ RUN pnpm install --frozen-lockfile --prod
 # Stage 3: serve. Named so the release workflow can build this stage with the cache disabled - the
 # `apk upgrade` below only means anything if it actually re-runs (see release.yml).
 FROM node:24-alpine AS runtime
-# apk upgrade for OS-package CVEs, same reasoning as gn33-shop-app's Dockerfile. npm/npx/corepack are
+# apk upgrade for OS-package CVEs, same reasoning as gn33-blog-app's Dockerfile. npm/npx/corepack are
 # removed rather than upgraded: this stage only ever runs `node server.mjs` (see CMD below), never `npm`
 # or `pnpm`, but the base image still ships npm's own bundled node_modules regardless - a full copy of the
 # npm CLI's dependency tree (tar, undici, ip-address and more) that Trivy scans and flags CVEs in even

@@ -1,7 +1,7 @@
 name: release
 
 # Builds and publishes the SPA image to GHCR. Deployment stays manual: a human picks an immutable tag to
-# pull (see gn33-shop-deploy/README.md).
+# pull (see gn33-blog-deploy/README.md).
 #
 # The image carries no environment-specific values - the API origin is injected at container start
 # through /config.js - so one published image is deployable anywhere.
@@ -15,7 +15,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/gn33-shop-spa
+  IMAGE_NAME: ${{ github.repository_owner }}/gn33-blog-spa
 
 jobs:
   check:
@@ -80,7 +80,7 @@ jobs:
         with:
           context: .
           load: true
-          tags: gn33-shop-spa:scan
+          tags: gn33-blog-spa:scan
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -95,7 +95,7 @@ jobs:
         # "Set up job", before any step runs.
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: gn33-shop-spa:scan
+          image-ref: gn33-blog-spa:scan
           severity: HIGH,CRITICAL
           # Fail on fixable findings only, so the build stays worth reading.
           ignore-unfixed: true
@@ -110,6 +110,6 @@ jobs:
         run: |
           echo "$TAGS" | while read -r tag; do
             [ -z "$tag" ] && continue
-            docker tag gn33-shop-spa:scan "$tag"
+            docker tag gn33-blog-spa:scan "$tag"
             docker push "$tag"
           done
