@@ -1,0 +1,24 @@
+{
+  "name": "gn33 - Online shop",
+  "short_name": "gn33",
+  "description": "Create a gn33 account to manage your details, your orders and your privacy.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0f172b",
+  "theme_color": "#bef264",
+  "icons": [
+    {
+      "src": "/nLogoColorBG.png",
+      "sizes": "648x649",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/nLogoColorBG.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

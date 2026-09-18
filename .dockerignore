@@ -1,0 +1,31 @@
+# Installed and built inside the image
+node_modules
+dist
+dist-ssr
+coverage
+
+# Secrets and deployment scratch. Nothing environment-specific may enter the build context - the image
+# is configured at runtime through /config.js, not at build time.
+.env
+.env.*
+truenas.txt
+comands.txt
+
+# VCS and tooling
+.git
+.gitignore
+.vscode
+.claude
+.agents
+.tanstack
+skills-lock.json
+.cta.json
+
+# Docs and lint config - not needed to build (tsconfig.json is, since `pnpm build` runs tsc)
+*.md
+.prettierignore
+prettier.config.js
+eslint.config.js
+Dockerfile
+.dockerignore
+.github

@@ -1,0 +1,12 @@
+allowBuilds:
+  unrs-resolver: false
+
+minimumReleaseAgeExclude:
+  - '@tanstack/react-table@9.2.4'
+  - '@tanstack/table-core@9.2.4'
+
+overrides:
+  brace-expansion@<5.0.9: '>=5.0.9'
+  fast-uri@<3.1.5: '>=3.1.5'
+  js-yaml@<4.3.1: '>=4.3.1'
+  nanoid@<3.3.18: '>=3.3.18'

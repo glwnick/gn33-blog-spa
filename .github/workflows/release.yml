@@ -1,0 +1,115 @@
+name: release
+
+# Builds and publishes the SPA image to GHCR. Deployment stays manual: a human picks an immutable tag to
+# pull (see gn33-shop-deploy/README.md).
+#
+# The image carries no environment-specific values - the API origin is injected at container start
+# through /config.js - so one published image is deployable anywhere.
+on:
+  push:
+    branches: [master]
+    tags: ['v*']
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/gn33-shop-spa
+
+jobs:
+  check:
+    name: lint, typecheck, test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # No `version:` input: the action honours the `packageManager: pnpm@11.x` pin in package.json,
+      # which is the same trap documented in CLAUDE.md for local development - a bare pnpm resolves to
+      # whatever is on PATH and disagrees with pnpm 11 about the store path.
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+
+  publish:
+    name: publish
+    # Never publish an image from a commit that did not pass lint, typecheck and tests. The image build
+    # would catch type errors on its own (`pnpm build` runs tsc), but not lint or test failures.
+    needs: check
+    # Written as a not-equals so a manual `workflow_dispatch` run still publishes; `== 'push'` would
+    # silently skip this job on every hand-started run and leave only a green check job behind.
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: docker/setup-buildx-action@v4
+
+      - uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,format=short
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+
+      # Built into the local daemon first, NOT pushed. See the backend workflow: scanning after the
+      # push leaves a vulnerable image in GHCR under both the sha- tag and `latest`, already
+      # pullable, with only a red build to show for it.
+      - name: Build for scanning
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          load: true
+          tags: gn33-shop-spa:scan
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          # Without this the `apk upgrade` in the runtime stage is a cache hit forever and its package set
+          # freezes while Trivy's database moves on, which is exactly how the backend image failed this gate
+          # on an openssl CVE its Dockerfile already upgraded. The pnpm build stage above still comes from
+          # cache; only the runtime stage is rebuilt.
+          no-cache-filters: runtime
+
+      - name: Scan before publishing
+        # Tags on this action are v-prefixed; a bare `0.28.0` does not resolve and fails the job at
+        # "Set up job", before any step runs.
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: gn33-shop-spa:scan
+          severity: HIGH,CRITICAL
+          # Fail on fixable findings only, so the build stays worth reading.
+          ignore-unfixed: true
+          exit-code: '1'
+
+      # Pushes the exact image Trivy just scanned rather than rebuilding and trusting the cache to
+      # reproduce it - with the runtime stage deliberately uncached, a rebuild would resolve its packages
+      # afresh and could publish bits nothing scanned. Same shape as the backend workflow.
+      - name: Publish
+        env:
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          echo "$TAGS" | while read -r tag; do
+            [ -z "$tag" ] && continue
+            docker tag gn33-shop-spa:scan "$tag"
+            docker push "$tag"
+          done
