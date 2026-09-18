@@ -9,7 +9,6 @@ import type {
   UserResponse,
   UserStatsResponse,
 } from '@/schemas/users';
-import type { CheckoutAddress } from '@/schemas/checkout';
 import type { CreateObjectResponse } from '@/schemas/common';
 import type { AxiosResponse } from 'axios';
 import {
@@ -119,20 +118,5 @@ export const gdprEraseUser = async (userId: string): Promise<void> => {
 export const getUserStats = async (): Promise<UserStatsResponse> => {
   const res = await api.get<UserStatsResponse>(API_ENDPOINTS.users.stats);
   return userStatsResponseSchema.parse(res.data);
-};
-
-export const saveAddress = async (
-  userId: string,
-  address: CheckoutAddress,
-): Promise<UserDetailsResponse> => {
-  const res = await api.put<UserDetailsResponse>(
-    API_ENDPOINTS.users.address(userId),
-    address,
-  );
-  return userDetailsResponseSchema.parse(res.data);
-};
-
-export const deleteAddress = async (userId: string): Promise<void> => {
-  await api.delete(API_ENDPOINTS.users.address(userId));
 };
 

@@ -32,10 +32,9 @@ export const Route = createFileRoute('/_no-auth')({
     if (isAuthBypassPath(location.pathname)) {
       return;
     }
-    // Redirect authenticated users away from register. `/home`, not `/`: since slice 6a made `/`
-    // the public shop landing page, `/` no longer means "your account", and the same default the
-    // post-login handler already uses (`login/index.tsx`) keeps every "you're already signed in"
-    // redirect landing in the same place.
+    // Redirect authenticated users away from register, to `/` - the public feed every visitor sees,
+    // signed in or not - matching the same default the post-login handler already uses
+    // (`login/index.tsx`), so every "you're already signed in" redirect lands in the same place.
     // `user`, not `accessToken` - see `_auth.tsx` for why that is the field that means "logged in"
     // on both sides. Identical behaviour while this subtree is still `ssr: false`, since the client
     // sets both together; it stops being identical the moment stage E lifts that flag.
@@ -46,7 +45,7 @@ export const Route = createFileRoute('/_no-auth')({
       if (isSafeRedirectTarget(search.redirect)) {
         throw redirect({ to: search.redirect });
       } else {
-        throw redirect({ to: '/home' });
+        throw redirect({ to: '/' });
       }
     }
   },

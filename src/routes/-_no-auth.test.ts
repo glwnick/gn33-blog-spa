@@ -26,12 +26,12 @@ describe('_no-auth beforeLoad', () => {
     expect(err).toBeUndefined();
   });
 
-  it('bounces an authenticated visitor from /login to /home by default', () => {
+  it('bounces an authenticated visitor from /login to / by default', () => {
     const err = captureRedirect(() =>
       runBeforeLoad(createAuthContext({ accessToken: 'token', user: createAuthUser() }), '/login'),
     );
 
-    expect(err?.options.to).toBe('/home');
+    expect(err?.options.to).toBe('/');
   });
 
   it('honours an explicit ?redirect= for an authenticated visitor', () => {

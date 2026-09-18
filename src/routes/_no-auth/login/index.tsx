@@ -61,7 +61,7 @@ function LoginPage() {
       }
       if (data.accessToken && data.user) {
         login({ accessToken: data.accessToken, user: data.user });
-        navigate({ to: search.redirect || '/home' });
+        navigate({ to: search.redirect || '/' });
       }
     },
     meta: {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createLink, useMatchRoute } from '@tanstack/react-router';
-import { ChevronDown, Menu, ShoppingBag } from 'lucide-react';
+import { ChevronDown, Menu, PenLine } from 'lucide-react';
 import type { LinkComponent } from '@tanstack/react-router';
 import type { LucideIcon } from 'lucide-react';
 import type { NavItem } from '@/components/layout/nav-config';
@@ -30,47 +30,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { useAuth } from '@/context/auth-provider';
-import { useCart } from '@/context/cart-provider';
 import { useTranslation } from '@/hooks/use-translation';
 import { cn } from '@/lib/utils';
-
-/** The cart icon button, badge-count pill styled per the shop design handoff. */
-function CartButton() {
-  const { t } = useTranslation();
-  const { itemCount } = useCart();
-
-  return (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <AnchorLink
-            to="/cart"
-            preload="intent"
-            aria-label={t('cart')}
-            className={cn(
-              buttonVariants({ variant: 'ghost', size: 'icon' }),
-              'relative',
-            )}
-          >
-            <ShoppingBag />
-            {itemCount > 0 && (
-              <span className="absolute -top-px -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full border-2 border-background bg-primary px-1 text-[10px] font-semibold text-primary-foreground">
-                {itemCount > 99 ? '99+' : itemCount}
-              </span>
-            )}
-          </AnchorLink>
-        }
-      />
-      <TooltipContent>{t('cart')}</TooltipContent>
-    </Tooltip>
-  );
-}
 
 type NavAnchorProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   title: string;
@@ -156,10 +118,8 @@ const PanelNavLink: LinkComponent<typeof TanStackPanelLink> = (props) => (
 /**
  * A staff-only group rendered as a dropdown rather than as flat links.
  *
- * <p>Flat links would fit today, but an admin already carries seven destinations and the shop's own catalogue,
- * orders and inventory items all land in the bar later. Grouping the back-office ones keeps the customer-facing
- * links first and reduces how much horizontal space the bar needs at the `lg` breakpoint where it switches from
- * the mobile sheet.
+ * <p>Kept as its own labeled group, even with one item per tier today, so a future addition to either tier
+ * (a second manager or admin destination) has somewhere to land without restructuring the bar.
  */
 function NavGroupMenu({
   label,
@@ -256,8 +216,8 @@ function SheetSection({
  * The application's single navigation surface, on every route and at the top on every viewport.
  *
  * <p>It renders for anonymous visitors too, which is why it lives at the root rather than inside the `_auth`
- * layout: a shop's catalogue is browsable without an account, so the same bar has to carry both the sign-in
- * buttons and the signed-in account menu.
+ * layout: the feed is browsable without an account, so the same bar has to carry both the sign-in buttons
+ * and the signed-in account menu.
  */
 export function TopNav() {
   const { t } = useTranslation();
@@ -286,9 +246,9 @@ export function TopNav() {
         aria-label={t('mainNavigation')}
         className="mx-auto flex h-14 w-full max-w-7xl items-center gap-2 px-3 lg:px-4"
       >
-        {/* `/` is the shop now, for every visitor: it no longer redirects a signed-in visitor to `/home`, so a
-            shop's wordmark leads to the shop rather than to the account dashboard. `/home` stays one click
-            away in `USER_NAV_ITEMS`, with its own "Home" label - the wordmark needs a distinct one so a
+        {/* `/` is the public feed, for every visitor, signed in or not: the wordmark always leads there rather
+            than to a signed-in dashboard. A signed-in author's own posts stay one click away instead, in
+            `USER_NAV_ITEMS`'s "Dashboard" entry - the wordmark needs its own distinct label so a
             screen-reader user does not hear the same label announce two different destinations. */}
         <AnchorLink
           to="/"
@@ -315,7 +275,16 @@ export function TopNav() {
         </div>
 
         <div className="ml-auto flex shrink-0 items-center gap-1 lg:ml-0">
-          <CartButton />
+          {isAuthenticated && (
+            <AnchorLink
+              to="/write"
+              preload="intent"
+              className={cn(buttonVariants({ variant: 'default', size: 'sm' }), 'gap-1.5')}
+            >
+              <PenLine className="size-4" />
+              <span className="hidden sm:inline">{t('write')}</span>
+            </AnchorLink>
+          )}
           <DarkModeToggle />
           <div className="hidden lg:flex">
             <LanguageSwitcher />

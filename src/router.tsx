@@ -9,7 +9,6 @@ import type { AuthUser } from '@/types/api-types.ts';
 import { DefaultNotFound } from '@/components/default-not-found.tsx';
 import { ThemeProvider } from '@/context/theme-provider.tsx';
 import { AuthProvider } from '@/context/auth-provider.tsx';
-import { CartProvider } from '@/context/cart-provider.tsx';
 import { routeTree } from '@/routeTree.gen.ts';
 import { createQueryClient } from '@/lib/query-client.ts';
 import { getAuthSnapshot, updateAuthSnapshot } from '@/lib/auth-token.ts';
@@ -107,10 +106,8 @@ export function getRouter() {
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
             <ThemeProvider>
-              <CartProvider>
-                {children}
-                <Toaster />
-              </CartProvider>
+              {children}
+              <Toaster />
             </ThemeProvider>
           </AuthProvider>
         </QueryClientProvider>

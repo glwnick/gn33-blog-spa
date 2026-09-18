@@ -101,7 +101,7 @@ function RouteComponent() {
             onAccept={() => acceptGdprMutation()}
           />
           {user?.termsAccepted && user.gdprConsentGiven && (
-            <ButtonLink to="/home" variant="secondary">
+            <ButtonLink to="/" variant="secondary">
               <Home/>{t('home')}
             </ButtonLink>
           )}

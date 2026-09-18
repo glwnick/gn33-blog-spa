@@ -12,21 +12,17 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as NoAuthRouteImport } from './routes/_no-auth'
-import { Route as CartRouteImport } from './routes/cart'
-import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as AuthAdminRouteImport } from './routes/_auth/_admin'
 import { Route as AuthManagerRouteImport } from './routes/_auth/_manager'
-import { Route as OrderConfirmationOrderIdRouteImport } from './routes/order-confirmation/$orderId'
-import { Route as ShopIndexRouteImport } from './routes/shop/index'
-import { Route as ShopSlugRouteImport } from './routes/shop/$slug'
+import { Route as AuthorsAuthorIdRouteImport } from './routes/authors/$authorId'
+import { Route as PostsPostIdRouteImport } from './routes/posts/$postId'
 import { Route as TermsIndexRouteImport } from './routes/terms/index'
-import { Route as AuthFavoritesIndexRouteImport } from './routes/_auth/favorites/index'
-import { Route as AuthHomeIndexRouteImport } from './routes/_auth/home/index'
-import { Route as AuthOrdersIndexRouteImport } from './routes/_auth/orders/index'
-import { Route as AuthOrdersOrderIdRouteImport } from './routes/_auth/orders/$orderId'
+import { Route as AuthDashboardIndexRouteImport } from './routes/_auth/dashboard/index'
 import { Route as AuthProfileIndexRouteImport } from './routes/_auth/profile/index'
 import { Route as AuthProfilePrivacyRouteImport } from './routes/_auth/profile/privacy'
 import { Route as AuthProfileSecurityRouteImport } from './routes/_auth/profile/security'
+import { Route as AuthWriteIndexRouteImport } from './routes/_auth/write/index'
+import { Route as AuthWritePostIdRouteImport } from './routes/_auth/write/$postId'
 import { Route as NoAuthAboutIndexRouteImport } from './routes/_no-auth/about/index'
 import { Route as NoAuthContactIndexRouteImport } from './routes/_no-auth/contact/index'
 import { Route as NoAuthForgotPasswordIndexRouteImport } from './routes/_no-auth/forgot-password/index'
@@ -35,16 +31,10 @@ import { Route as NoAuthRegisterIndexRouteImport } from './routes/_no-auth/regis
 import { Route as NoAuthResetPasswordIndexRouteImport } from './routes/_no-auth/reset-password/index'
 import { Route as NoAuthTwoFactorAuthIndexRouteImport } from './routes/_no-auth/two-factor-auth/index'
 import { Route as NoAuthVerifyEmailIndexRouteImport } from './routes/_no-auth/verify-email/index'
-import { Route as AuthAdminImportIndexRouteImport } from './routes/_auth/_admin/import/index'
 import { Route as AuthAdminSettingsIndexRouteImport } from './routes/_auth/_admin/settings/index'
 import { Route as AuthManagerUsersIndexRouteImport } from './routes/_auth/_manager/users/index'
 import { Route as AuthManagerUsersUserIdRouteImport } from './routes/_auth/_manager/users/$userId'
 import { Route as AuthManagerUsersNewRouteImport } from './routes/_auth/_manager/users/new'
-import { Route as AuthManagerAdminLibraryIndexRouteImport } from './routes/_auth/_manager/admin/library/index'
-import { Route as AuthManagerAdminOrdersIndexRouteImport } from './routes/_auth/_manager/admin/orders/index'
-import { Route as AuthManagerAdminProductsIndexRouteImport } from './routes/_auth/_manager/admin/products/index'
-import { Route as AuthManagerAdminProductsProductIdRouteImport } from './routes/_auth/_manager/admin/products/$productId'
-import { Route as AuthManagerAdminProductsNewRouteImport } from './routes/_auth/_manager/admin/products/new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -59,16 +49,6 @@ const NoAuthRoute = NoAuthRouteImport.update({
   id: '/_no-auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CartRoute = CartRouteImport.update({
-  id: '/cart',
-  path: '/cart',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CheckoutRoute = CheckoutRouteImport.update({
-  id: '/checkout',
-  path: '/checkout',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthAdminRoute = AuthAdminRouteImport.update({
   id: '/_admin',
   getParentRoute: () => AuthRoute,
@@ -77,20 +57,14 @@ const AuthManagerRoute = AuthManagerRouteImport.update({
   id: '/_manager',
   getParentRoute: () => AuthRoute,
 } as any)
-const OrderConfirmationOrderIdRoute =
-  OrderConfirmationOrderIdRouteImport.update({
-    id: '/order-confirmation/$orderId',
-    path: '/order-confirmation/$orderId',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ShopIndexRoute = ShopIndexRouteImport.update({
-  id: '/shop/',
-  path: '/shop/',
+const AuthorsAuthorIdRoute = AuthorsAuthorIdRouteImport.update({
+  id: '/authors/$authorId',
+  path: '/authors/$authorId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ShopSlugRoute = ShopSlugRouteImport.update({
-  id: '/shop/$slug',
-  path: '/shop/$slug',
+const PostsPostIdRoute = PostsPostIdRouteImport.update({
+  id: '/posts/$postId',
+  path: '/posts/$postId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsIndexRoute = TermsIndexRouteImport.update({
@@ -98,24 +72,9 @@ const TermsIndexRoute = TermsIndexRouteImport.update({
   path: '/terms/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthFavoritesIndexRoute = AuthFavoritesIndexRouteImport.update({
-  id: '/favorites/',
-  path: '/favorites/',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AuthHomeIndexRoute = AuthHomeIndexRouteImport.update({
-  id: '/home/',
-  path: '/home/',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AuthOrdersIndexRoute = AuthOrdersIndexRouteImport.update({
-  id: '/orders/',
-  path: '/orders/',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AuthOrdersOrderIdRoute = AuthOrdersOrderIdRouteImport.update({
-  id: '/orders/$orderId',
-  path: '/orders/$orderId',
+const AuthDashboardIndexRoute = AuthDashboardIndexRouteImport.update({
+  id: '/dashboard/',
+  path: '/dashboard/',
   getParentRoute: () => AuthRoute,
 } as any)
 const AuthProfileIndexRoute = AuthProfileIndexRouteImport.update({
@@ -131,6 +90,16 @@ const AuthProfilePrivacyRoute = AuthProfilePrivacyRouteImport.update({
 const AuthProfileSecurityRoute = AuthProfileSecurityRouteImport.update({
   id: '/profile/security',
   path: '/profile/security',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthWriteIndexRoute = AuthWriteIndexRouteImport.update({
+  id: '/write/',
+  path: '/write/',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthWritePostIdRoute = AuthWritePostIdRouteImport.update({
+  id: '/write/$postId',
+  path: '/write/$postId',
   getParentRoute: () => AuthRoute,
 } as any)
 const NoAuthAboutIndexRoute = NoAuthAboutIndexRouteImport.update({
@@ -176,11 +145,6 @@ const NoAuthVerifyEmailIndexRoute = NoAuthVerifyEmailIndexRouteImport.update({
   path: '/verify-email/',
   getParentRoute: () => NoAuthRoute,
 } as any)
-const AuthAdminImportIndexRoute = AuthAdminImportIndexRouteImport.update({
-  id: '/import/',
-  path: '/import/',
-  getParentRoute: () => AuthAdminRoute,
-} as any)
 const AuthAdminSettingsIndexRoute = AuthAdminSettingsIndexRouteImport.update({
   id: '/settings/',
   path: '/settings/',
@@ -201,52 +165,18 @@ const AuthManagerUsersNewRoute = AuthManagerUsersNewRouteImport.update({
   path: '/users/new',
   getParentRoute: () => AuthManagerRoute,
 } as any)
-const AuthManagerAdminLibraryIndexRoute =
-  AuthManagerAdminLibraryIndexRouteImport.update({
-    id: '/admin/library/',
-    path: '/admin/library/',
-    getParentRoute: () => AuthManagerRoute,
-  } as any)
-const AuthManagerAdminOrdersIndexRoute =
-  AuthManagerAdminOrdersIndexRouteImport.update({
-    id: '/admin/orders/',
-    path: '/admin/orders/',
-    getParentRoute: () => AuthManagerRoute,
-  } as any)
-const AuthManagerAdminProductsIndexRoute =
-  AuthManagerAdminProductsIndexRouteImport.update({
-    id: '/admin/products/',
-    path: '/admin/products/',
-    getParentRoute: () => AuthManagerRoute,
-  } as any)
-const AuthManagerAdminProductsProductIdRoute =
-  AuthManagerAdminProductsProductIdRouteImport.update({
-    id: '/admin/products/$productId',
-    path: '/admin/products/$productId',
-    getParentRoute: () => AuthManagerRoute,
-  } as any)
-const AuthManagerAdminProductsNewRoute =
-  AuthManagerAdminProductsNewRouteImport.update({
-    id: '/admin/products/new',
-    path: '/admin/products/new',
-    getParentRoute: () => AuthManagerRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/cart': typeof CartRoute
-  '/checkout': typeof CheckoutRoute
-  '/order-confirmation/$orderId': typeof OrderConfirmationOrderIdRoute
-  '/shop/$slug': typeof ShopSlugRoute
-  '/shop/': typeof ShopIndexRoute
+  '/authors/$authorId': typeof AuthorsAuthorIdRoute
+  '/posts/$postId': typeof PostsPostIdRoute
   '/terms/': typeof TermsIndexRoute
-  '/orders/$orderId': typeof AuthOrdersOrderIdRoute
   '/profile/privacy': typeof AuthProfilePrivacyRoute
   '/profile/security': typeof AuthProfileSecurityRoute
-  '/favorites/': typeof AuthFavoritesIndexRoute
-  '/home/': typeof AuthHomeIndexRoute
-  '/orders/': typeof AuthOrdersIndexRoute
+  '/write/$postId': typeof AuthWritePostIdRoute
+  '/dashboard/': typeof AuthDashboardIndexRoute
   '/profile/': typeof AuthProfileIndexRoute
+  '/write/': typeof AuthWriteIndexRoute
   '/about/': typeof NoAuthAboutIndexRoute
   '/contact/': typeof NoAuthContactIndexRoute
   '/forgot-password/': typeof NoAuthForgotPasswordIndexRoute
@@ -257,30 +187,20 @@ export interface FileRoutesByFullPath {
   '/verify-email/': typeof NoAuthVerifyEmailIndexRoute
   '/users/$userId': typeof AuthManagerUsersUserIdRoute
   '/users/new': typeof AuthManagerUsersNewRoute
-  '/import/': typeof AuthAdminImportIndexRoute
   '/settings/': typeof AuthAdminSettingsIndexRoute
   '/users/': typeof AuthManagerUsersIndexRoute
-  '/admin/products/$productId': typeof AuthManagerAdminProductsProductIdRoute
-  '/admin/products/new': typeof AuthManagerAdminProductsNewRoute
-  '/admin/library/': typeof AuthManagerAdminLibraryIndexRoute
-  '/admin/orders/': typeof AuthManagerAdminOrdersIndexRoute
-  '/admin/products/': typeof AuthManagerAdminProductsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/cart': typeof CartRoute
-  '/checkout': typeof CheckoutRoute
-  '/order-confirmation/$orderId': typeof OrderConfirmationOrderIdRoute
-  '/shop/$slug': typeof ShopSlugRoute
-  '/shop': typeof ShopIndexRoute
+  '/authors/$authorId': typeof AuthorsAuthorIdRoute
+  '/posts/$postId': typeof PostsPostIdRoute
   '/terms': typeof TermsIndexRoute
-  '/orders/$orderId': typeof AuthOrdersOrderIdRoute
   '/profile/privacy': typeof AuthProfilePrivacyRoute
   '/profile/security': typeof AuthProfileSecurityRoute
-  '/favorites': typeof AuthFavoritesIndexRoute
-  '/home': typeof AuthHomeIndexRoute
-  '/orders': typeof AuthOrdersIndexRoute
+  '/write/$postId': typeof AuthWritePostIdRoute
+  '/dashboard': typeof AuthDashboardIndexRoute
   '/profile': typeof AuthProfileIndexRoute
+  '/write': typeof AuthWriteIndexRoute
   '/about': typeof NoAuthAboutIndexRoute
   '/contact': typeof NoAuthContactIndexRoute
   '/forgot-password': typeof NoAuthForgotPasswordIndexRoute
@@ -291,35 +211,25 @@ export interface FileRoutesByTo {
   '/verify-email': typeof NoAuthVerifyEmailIndexRoute
   '/users/$userId': typeof AuthManagerUsersUserIdRoute
   '/users/new': typeof AuthManagerUsersNewRoute
-  '/import': typeof AuthAdminImportIndexRoute
   '/settings': typeof AuthAdminSettingsIndexRoute
   '/users': typeof AuthManagerUsersIndexRoute
-  '/admin/products/$productId': typeof AuthManagerAdminProductsProductIdRoute
-  '/admin/products/new': typeof AuthManagerAdminProductsNewRoute
-  '/admin/library': typeof AuthManagerAdminLibraryIndexRoute
-  '/admin/orders': typeof AuthManagerAdminOrdersIndexRoute
-  '/admin/products': typeof AuthManagerAdminProductsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/_no-auth': typeof NoAuthRouteWithChildren
-  '/cart': typeof CartRoute
-  '/checkout': typeof CheckoutRoute
   '/_auth/_admin': typeof AuthAdminRouteWithChildren
   '/_auth/_manager': typeof AuthManagerRouteWithChildren
-  '/order-confirmation/$orderId': typeof OrderConfirmationOrderIdRoute
-  '/shop/$slug': typeof ShopSlugRoute
-  '/shop/': typeof ShopIndexRoute
+  '/authors/$authorId': typeof AuthorsAuthorIdRoute
+  '/posts/$postId': typeof PostsPostIdRoute
   '/terms/': typeof TermsIndexRoute
-  '/_auth/orders/$orderId': typeof AuthOrdersOrderIdRoute
   '/_auth/profile/privacy': typeof AuthProfilePrivacyRoute
   '/_auth/profile/security': typeof AuthProfileSecurityRoute
-  '/_auth/favorites/': typeof AuthFavoritesIndexRoute
-  '/_auth/home/': typeof AuthHomeIndexRoute
-  '/_auth/orders/': typeof AuthOrdersIndexRoute
+  '/_auth/write/$postId': typeof AuthWritePostIdRoute
+  '/_auth/dashboard/': typeof AuthDashboardIndexRoute
   '/_auth/profile/': typeof AuthProfileIndexRoute
+  '/_auth/write/': typeof AuthWriteIndexRoute
   '/_no-auth/about/': typeof NoAuthAboutIndexRoute
   '/_no-auth/contact/': typeof NoAuthContactIndexRoute
   '/_no-auth/forgot-password/': typeof NoAuthForgotPasswordIndexRoute
@@ -330,32 +240,22 @@ export interface FileRoutesById {
   '/_no-auth/verify-email/': typeof NoAuthVerifyEmailIndexRoute
   '/_auth/_manager/users/$userId': typeof AuthManagerUsersUserIdRoute
   '/_auth/_manager/users/new': typeof AuthManagerUsersNewRoute
-  '/_auth/_admin/import/': typeof AuthAdminImportIndexRoute
   '/_auth/_admin/settings/': typeof AuthAdminSettingsIndexRoute
   '/_auth/_manager/users/': typeof AuthManagerUsersIndexRoute
-  '/_auth/_manager/admin/products/$productId': typeof AuthManagerAdminProductsProductIdRoute
-  '/_auth/_manager/admin/products/new': typeof AuthManagerAdminProductsNewRoute
-  '/_auth/_manager/admin/library/': typeof AuthManagerAdminLibraryIndexRoute
-  '/_auth/_manager/admin/orders/': typeof AuthManagerAdminOrdersIndexRoute
-  '/_auth/_manager/admin/products/': typeof AuthManagerAdminProductsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/cart'
-    | '/checkout'
-    | '/order-confirmation/$orderId'
-    | '/shop/$slug'
-    | '/shop/'
+    | '/authors/$authorId'
+    | '/posts/$postId'
     | '/terms/'
-    | '/orders/$orderId'
     | '/profile/privacy'
     | '/profile/security'
-    | '/favorites/'
-    | '/home/'
-    | '/orders/'
+    | '/write/$postId'
+    | '/dashboard/'
     | '/profile/'
+    | '/write/'
     | '/about/'
     | '/contact/'
     | '/forgot-password/'
@@ -366,30 +266,20 @@ export interface FileRouteTypes {
     | '/verify-email/'
     | '/users/$userId'
     | '/users/new'
-    | '/import/'
     | '/settings/'
     | '/users/'
-    | '/admin/products/$productId'
-    | '/admin/products/new'
-    | '/admin/library/'
-    | '/admin/orders/'
-    | '/admin/products/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/cart'
-    | '/checkout'
-    | '/order-confirmation/$orderId'
-    | '/shop/$slug'
-    | '/shop'
+    | '/authors/$authorId'
+    | '/posts/$postId'
     | '/terms'
-    | '/orders/$orderId'
     | '/profile/privacy'
     | '/profile/security'
-    | '/favorites'
-    | '/home'
-    | '/orders'
+    | '/write/$postId'
+    | '/dashboard'
     | '/profile'
+    | '/write'
     | '/about'
     | '/contact'
     | '/forgot-password'
@@ -400,34 +290,24 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/users/$userId'
     | '/users/new'
-    | '/import'
     | '/settings'
     | '/users'
-    | '/admin/products/$productId'
-    | '/admin/products/new'
-    | '/admin/library'
-    | '/admin/orders'
-    | '/admin/products'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/_no-auth'
-    | '/cart'
-    | '/checkout'
     | '/_auth/_admin'
     | '/_auth/_manager'
-    | '/order-confirmation/$orderId'
-    | '/shop/$slug'
-    | '/shop/'
+    | '/authors/$authorId'
+    | '/posts/$postId'
     | '/terms/'
-    | '/_auth/orders/$orderId'
     | '/_auth/profile/privacy'
     | '/_auth/profile/security'
-    | '/_auth/favorites/'
-    | '/_auth/home/'
-    | '/_auth/orders/'
+    | '/_auth/write/$postId'
+    | '/_auth/dashboard/'
     | '/_auth/profile/'
+    | '/_auth/write/'
     | '/_no-auth/about/'
     | '/_no-auth/contact/'
     | '/_no-auth/forgot-password/'
@@ -438,25 +318,16 @@ export interface FileRouteTypes {
     | '/_no-auth/verify-email/'
     | '/_auth/_manager/users/$userId'
     | '/_auth/_manager/users/new'
-    | '/_auth/_admin/import/'
     | '/_auth/_admin/settings/'
     | '/_auth/_manager/users/'
-    | '/_auth/_manager/admin/products/$productId'
-    | '/_auth/_manager/admin/products/new'
-    | '/_auth/_manager/admin/library/'
-    | '/_auth/_manager/admin/orders/'
-    | '/_auth/_manager/admin/products/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
   NoAuthRoute: typeof NoAuthRouteWithChildren
-  CartRoute: typeof CartRoute
-  CheckoutRoute: typeof CheckoutRoute
-  OrderConfirmationOrderIdRoute: typeof OrderConfirmationOrderIdRoute
-  ShopSlugRoute: typeof ShopSlugRoute
-  ShopIndexRoute: typeof ShopIndexRoute
+  AuthorsAuthorIdRoute: typeof AuthorsAuthorIdRoute
+  PostsPostIdRoute: typeof PostsPostIdRoute
   TermsIndexRoute: typeof TermsIndexRoute
 }
 
@@ -483,20 +354,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NoAuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/cart': {
-      id: '/cart'
-      path: '/cart'
-      fullPath: '/cart'
-      preLoaderRoute: typeof CartRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/checkout': {
-      id: '/checkout'
-      path: '/checkout'
-      fullPath: '/checkout'
-      preLoaderRoute: typeof CheckoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_auth/_admin': {
       id: '/_auth/_admin'
       path: ''
@@ -511,25 +368,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthManagerRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/order-confirmation/$orderId': {
-      id: '/order-confirmation/$orderId'
-      path: '/order-confirmation/$orderId'
-      fullPath: '/order-confirmation/$orderId'
-      preLoaderRoute: typeof OrderConfirmationOrderIdRouteImport
+    '/authors/$authorId': {
+      id: '/authors/$authorId'
+      path: '/authors/$authorId'
+      fullPath: '/authors/$authorId'
+      preLoaderRoute: typeof AuthorsAuthorIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/shop/': {
-      id: '/shop/'
-      path: '/shop'
-      fullPath: '/shop/'
-      preLoaderRoute: typeof ShopIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/shop/$slug': {
-      id: '/shop/$slug'
-      path: '/shop/$slug'
-      fullPath: '/shop/$slug'
-      preLoaderRoute: typeof ShopSlugRouteImport
+    '/posts/$postId': {
+      id: '/posts/$postId'
+      path: '/posts/$postId'
+      fullPath: '/posts/$postId'
+      preLoaderRoute: typeof PostsPostIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms/': {
@@ -539,32 +389,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth/favorites/': {
-      id: '/_auth/favorites/'
-      path: '/favorites'
-      fullPath: '/favorites/'
-      preLoaderRoute: typeof AuthFavoritesIndexRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/home/': {
-      id: '/_auth/home/'
-      path: '/home'
-      fullPath: '/home/'
-      preLoaderRoute: typeof AuthHomeIndexRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/orders/': {
-      id: '/_auth/orders/'
-      path: '/orders'
-      fullPath: '/orders/'
-      preLoaderRoute: typeof AuthOrdersIndexRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/orders/$orderId': {
-      id: '/_auth/orders/$orderId'
-      path: '/orders/$orderId'
-      fullPath: '/orders/$orderId'
-      preLoaderRoute: typeof AuthOrdersOrderIdRouteImport
+    '/_auth/dashboard/': {
+      id: '/_auth/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthDashboardIndexRouteImport
       parentRoute: typeof AuthRoute
     }
     '/_auth/profile/': {
@@ -586,6 +415,20 @@ declare module '@tanstack/react-router' {
       path: '/profile/security'
       fullPath: '/profile/security'
       preLoaderRoute: typeof AuthProfileSecurityRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/write/': {
+      id: '/_auth/write/'
+      path: '/write'
+      fullPath: '/write/'
+      preLoaderRoute: typeof AuthWriteIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/write/$postId': {
+      id: '/_auth/write/$postId'
+      path: '/write/$postId'
+      fullPath: '/write/$postId'
+      preLoaderRoute: typeof AuthWritePostIdRouteImport
       parentRoute: typeof AuthRoute
     }
     '/_no-auth/about/': {
@@ -644,13 +487,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NoAuthVerifyEmailIndexRouteImport
       parentRoute: typeof NoAuthRoute
     }
-    '/_auth/_admin/import/': {
-      id: '/_auth/_admin/import/'
-      path: '/import'
-      fullPath: '/import/'
-      preLoaderRoute: typeof AuthAdminImportIndexRouteImport
-      parentRoute: typeof AuthAdminRoute
-    }
     '/_auth/_admin/settings/': {
       id: '/_auth/_admin/settings/'
       path: '/settings'
@@ -679,51 +515,14 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthManagerUsersNewRouteImport
       parentRoute: typeof AuthManagerRoute
     }
-    '/_auth/_manager/admin/library/': {
-      id: '/_auth/_manager/admin/library/'
-      path: '/admin/library'
-      fullPath: '/admin/library/'
-      preLoaderRoute: typeof AuthManagerAdminLibraryIndexRouteImport
-      parentRoute: typeof AuthManagerRoute
-    }
-    '/_auth/_manager/admin/orders/': {
-      id: '/_auth/_manager/admin/orders/'
-      path: '/admin/orders'
-      fullPath: '/admin/orders/'
-      preLoaderRoute: typeof AuthManagerAdminOrdersIndexRouteImport
-      parentRoute: typeof AuthManagerRoute
-    }
-    '/_auth/_manager/admin/products/': {
-      id: '/_auth/_manager/admin/products/'
-      path: '/admin/products'
-      fullPath: '/admin/products/'
-      preLoaderRoute: typeof AuthManagerAdminProductsIndexRouteImport
-      parentRoute: typeof AuthManagerRoute
-    }
-    '/_auth/_manager/admin/products/$productId': {
-      id: '/_auth/_manager/admin/products/$productId'
-      path: '/admin/products/$productId'
-      fullPath: '/admin/products/$productId'
-      preLoaderRoute: typeof AuthManagerAdminProductsProductIdRouteImport
-      parentRoute: typeof AuthManagerRoute
-    }
-    '/_auth/_manager/admin/products/new': {
-      id: '/_auth/_manager/admin/products/new'
-      path: '/admin/products/new'
-      fullPath: '/admin/products/new'
-      preLoaderRoute: typeof AuthManagerAdminProductsNewRouteImport
-      parentRoute: typeof AuthManagerRoute
-    }
   }
 }
 
 interface AuthAdminRouteChildren {
-  AuthAdminImportIndexRoute: typeof AuthAdminImportIndexRoute
   AuthAdminSettingsIndexRoute: typeof AuthAdminSettingsIndexRoute
 }
 
 const AuthAdminRouteChildren: AuthAdminRouteChildren = {
-  AuthAdminImportIndexRoute: AuthAdminImportIndexRoute,
   AuthAdminSettingsIndexRoute: AuthAdminSettingsIndexRoute,
 }
 
@@ -735,23 +534,12 @@ interface AuthManagerRouteChildren {
   AuthManagerUsersUserIdRoute: typeof AuthManagerUsersUserIdRoute
   AuthManagerUsersNewRoute: typeof AuthManagerUsersNewRoute
   AuthManagerUsersIndexRoute: typeof AuthManagerUsersIndexRoute
-  AuthManagerAdminProductsProductIdRoute: typeof AuthManagerAdminProductsProductIdRoute
-  AuthManagerAdminProductsNewRoute: typeof AuthManagerAdminProductsNewRoute
-  AuthManagerAdminLibraryIndexRoute: typeof AuthManagerAdminLibraryIndexRoute
-  AuthManagerAdminOrdersIndexRoute: typeof AuthManagerAdminOrdersIndexRoute
-  AuthManagerAdminProductsIndexRoute: typeof AuthManagerAdminProductsIndexRoute
 }
 
 const AuthManagerRouteChildren: AuthManagerRouteChildren = {
   AuthManagerUsersUserIdRoute: AuthManagerUsersUserIdRoute,
   AuthManagerUsersNewRoute: AuthManagerUsersNewRoute,
   AuthManagerUsersIndexRoute: AuthManagerUsersIndexRoute,
-  AuthManagerAdminProductsProductIdRoute:
-    AuthManagerAdminProductsProductIdRoute,
-  AuthManagerAdminProductsNewRoute: AuthManagerAdminProductsNewRoute,
-  AuthManagerAdminLibraryIndexRoute: AuthManagerAdminLibraryIndexRoute,
-  AuthManagerAdminOrdersIndexRoute: AuthManagerAdminOrdersIndexRoute,
-  AuthManagerAdminProductsIndexRoute: AuthManagerAdminProductsIndexRoute,
 }
 
 const AuthManagerRouteWithChildren = AuthManagerRoute._addFileChildren(
@@ -761,25 +549,23 @@ const AuthManagerRouteWithChildren = AuthManagerRoute._addFileChildren(
 interface AuthRouteChildren {
   AuthAdminRoute: typeof AuthAdminRouteWithChildren
   AuthManagerRoute: typeof AuthManagerRouteWithChildren
-  AuthOrdersOrderIdRoute: typeof AuthOrdersOrderIdRoute
   AuthProfilePrivacyRoute: typeof AuthProfilePrivacyRoute
   AuthProfileSecurityRoute: typeof AuthProfileSecurityRoute
-  AuthFavoritesIndexRoute: typeof AuthFavoritesIndexRoute
-  AuthHomeIndexRoute: typeof AuthHomeIndexRoute
-  AuthOrdersIndexRoute: typeof AuthOrdersIndexRoute
+  AuthWritePostIdRoute: typeof AuthWritePostIdRoute
+  AuthDashboardIndexRoute: typeof AuthDashboardIndexRoute
   AuthProfileIndexRoute: typeof AuthProfileIndexRoute
+  AuthWriteIndexRoute: typeof AuthWriteIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthAdminRoute: AuthAdminRouteWithChildren,
   AuthManagerRoute: AuthManagerRouteWithChildren,
-  AuthOrdersOrderIdRoute: AuthOrdersOrderIdRoute,
   AuthProfilePrivacyRoute: AuthProfilePrivacyRoute,
   AuthProfileSecurityRoute: AuthProfileSecurityRoute,
-  AuthFavoritesIndexRoute: AuthFavoritesIndexRoute,
-  AuthHomeIndexRoute: AuthHomeIndexRoute,
-  AuthOrdersIndexRoute: AuthOrdersIndexRoute,
+  AuthWritePostIdRoute: AuthWritePostIdRoute,
+  AuthDashboardIndexRoute: AuthDashboardIndexRoute,
   AuthProfileIndexRoute: AuthProfileIndexRoute,
+  AuthWriteIndexRoute: AuthWriteIndexRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
@@ -813,11 +599,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
   NoAuthRoute: NoAuthRouteWithChildren,
-  CartRoute: CartRoute,
-  CheckoutRoute: CheckoutRoute,
-  OrderConfirmationOrderIdRoute: OrderConfirmationOrderIdRoute,
-  ShopSlugRoute: ShopSlugRoute,
-  ShopIndexRoute: ShopIndexRoute,
+  AuthorsAuthorIdRoute: AuthorsAuthorIdRoute,
+  PostsPostIdRoute: PostsPostIdRoute,
   TermsIndexRoute: TermsIndexRoute,
 }
 export const routeTree = rootRouteImport

@@ -46,16 +46,14 @@ function TwoFactorAuth() {
       if (data.accessToken && data.user) {
         login({ accessToken: data.accessToken, user: data.user });
 
-        // Defaults to /home, matching the plain-password path in routes/_no-auth/login. Defaulting to '/'
-        // instead sent every two-factor user to the public landing page: '/' only bounces authenticated
-        // visitors on to /home in its beforeLoad, and the router context is still the pre-login one on this
-        // tick, so the bounce does not happen. The startsWith guard keeps a stale ?redirect back to this
+        // Defaults to '/', matching the plain-password path in routes/_no-auth/login - the public feed
+        // every visitor sees, signed in or not. The startsWith guard keeps a stale ?redirect back to this
         // page from looping. isSafeRedirectTarget (L7, SECURITY-AUDIT-2026-09-15.md) additionally requires
         // a root-relative path before honouring it at all.
         const redirectTo =
           isSafeRedirectTarget(search.redirect) && !search.redirect.startsWith(Route.to)
             ? search.redirect
-            : '/home';
+            : '/';
         navigate({ to: redirectTo });
       }
     },

@@ -13,7 +13,6 @@ import {
   signInSchema,
 } from '@/schemas/common';
 import { resetPasswordSchema } from '@/schemas/auth';
-import { checkoutAddressSchema } from '@/schemas/checkout';
 import { filtersFor } from '@/types/pageable';
 
 // Create User
@@ -84,9 +83,6 @@ export const userDetailsResponseSchema = z.object({
   enabled: z.boolean(),
   accountExpiryDate: dateSchema.nullable(),
   userRoleType: userRoleTypeSchema,
-  // Phase 5's saved address (see backend UserEntity) - null until the shopper saves one, from the profile
-  // Address card or the checkout "save this address" option.
-  savedAddress: checkoutAddressSchema.nullable(),
 });
 
 export type UserDetailsResponse = z.infer<typeof userDetailsResponseSchema>;
@@ -113,7 +109,7 @@ export const defaultChangePasswordInputValues: ChangePasswordInput = {
 };
 
 /** Mirrors the backend `RoleType` enum - deliberately narrower than {@link userRoleTypeSchema}, which still
- * carries the inherited `INSTRUCTOR` value nothing in this shop assigns. */
+ * carries the inherited `INSTRUCTOR` value nothing in this app assigns. */
 export const roleFilterSchema = z.enum(['ADMIN', 'MANAGER', 'USER']);
 export type RoleFilter = z.infer<typeof roleFilterSchema>;
 

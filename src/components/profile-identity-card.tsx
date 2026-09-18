@@ -1,53 +1,40 @@
 import { useQuery } from '@tanstack/react-query';
-import { Heart, Package } from 'lucide-react';
 import type { QueryClient } from '@tanstack/react-query';
 import type { TranslationKey } from '@/hooks/use-translation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { UserAvatar } from '@/components/user-avatar';
 import { useAuth } from '@/context/auth-provider';
 import { useTranslation } from '@/hooks/use-translation';
 import { profileOptions } from '@/query-options/user-details';
-import { myOrderCountOptions } from '@/query-options/order-options';
-import { myFavoritesCountOptions } from '@/query-options/favorites-options';
 
-// Highest staff role wins the badge; a plain account holder falls back to "Customer". INSTRUCTOR is dead
-// weight carried over from gn33 (frontend-conventions) and never granted in the shop, so it has no entry here.
+// Highest staff role wins the badge; a plain account holder falls back to "Member". INSTRUCTOR is dead
+// weight carried over from gn33 (frontend-conventions) and never granted in this app, so it has no entry here.
 const STAFF_ROLE_LABELS: ReadonlyArray<readonly [string, TranslationKey]> = [
   ['ROLE_ADMIN', 'profileRoleAdmin'],
   ['ROLE_MANAGER', 'profileRoleManager'],
 ];
 
 /**
- * Everything `ProfileIdentityCard` reads, warmed from each `/profile*` route's own `loader` - the same
- * `ensureQueryData` house pattern as `routes/_auth/home/index.tsx`. Without this, the card (shared across all
- * three routes via `ProfileLayout`) would render as a loading skeleton on first paint on `security` and
- * `privacy`, which otherwise need no client query at all, then refetch once hydrated.
+ * Everything `ProfileIdentityCard` reads, warmed from each `/profile*` route's own `loader`. Without this,
+ * the card (shared across all three routes via `ProfileLayout`) would render as a loading skeleton on first
+ * paint on `security` and `privacy`, which otherwise need no client query at all, then refetch once hydrated.
  */
 export const prefetchProfileIdentity = (
   queryClient: QueryClient,
   userId: string,
-) =>
-  Promise.all([
-    queryClient.ensureQueryData(profileOptions(userId)),
-    queryClient.ensureQueryData(myOrderCountOptions()),
-    queryClient.ensureQueryData(myFavoritesCountOptions()),
-  ]);
+) => queryClient.ensureQueryData(profileOptions(userId));
 
 /**
- * The sticky left rail of the account section: avatar, name, email, a role badge, an "enabled" account-status
- * badge, and the Orders/Saved-pieces counts. Shared by all three `/profile*` routes via `ProfileLayout`, so
- * it reads `useAuth()` rather than taking props - `security.tsx` and `privacy.tsx` never fetch the full
- * profile DTO themselves.
+ * The sticky left rail of the account section: avatar, name, email, a role badge and an "enabled"
+ * account-status badge. Shared by all three `/profile*` routes via `ProfileLayout`, so it reads `useAuth()`
+ * rather than taking props - `security.tsx` and `privacy.tsx` never fetch the full profile DTO themselves.
  */
 export function ProfileIdentityCard() {
   const { user } = useAuth();
   const { t } = useTranslation();
   const { data: profile } = useQuery(profileOptions(user!.userId));
-  const { data: orderCount } = useQuery(myOrderCountOptions());
-  const { data: favoritesCount } = useQuery(myFavoritesCountOptions());
 
   const roleLabelKey =
     STAFF_ROLE_LABELS.find(([role]) => user!.roles.includes(role))?.[1] ??
@@ -78,35 +65,6 @@ export function ProfileIdentityCard() {
           {enabled && (
             <Badge variant="secondary">{t('profileActiveBadge')}</Badge>
           )}
-        </div>
-        <Separator />
-        <div className="grid w-full grid-cols-2 gap-3">
-          <div>
-            <div className="flex items-center justify-center gap-1.5 text-lg font-semibold">
-              <Package className="size-4 text-muted-foreground" />
-              {orderCount === undefined ? (
-                <Skeleton className="h-5 w-4" />
-              ) : (
-                orderCount
-              )}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {t('profileOrdersStat')}
-            </p>
-          </div>
-          <div>
-            <div className="flex items-center justify-center gap-1.5 text-lg font-semibold">
-              <Heart className="size-4 text-muted-foreground" />
-              {favoritesCount === undefined ? (
-                <Skeleton className="h-5 w-4" />
-              ) : (
-                favoritesCount
-              )}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {t('profileSavedPiecesStat')}
-            </p>
-          </div>
         </div>
       </CardContent>
     </Card>

@@ -7,7 +7,7 @@ export const Route = createFileRoute('/_auth/_manager')({
       context.auth.user?.roles.includes('ROLE_ADMIN');
 
     if (!isManager) {
-      throw redirect({ to: '/home' });
+      throw redirect({ to: '/' });
     }
   },
 });
