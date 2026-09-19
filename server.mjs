@@ -30,7 +30,7 @@ const CLIENT_DIR = resolve('./dist/client') + sep;
 const apiUrl = process.env.APP_API_URL;
 if (!apiUrl) {
   console.error(
-    'server.mjs: APP_API_URL is required (the full public origin, e.g. https://app.gn33.eu)',
+    'server.mjs: APP_API_URL is required (the full public origin, e.g. https://blog.gn33.eu)',
   );
   process.exit(1);
 }

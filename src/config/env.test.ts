@@ -25,14 +25,14 @@ describe('runtime configuration', () => {
 
   it('prefers the container-injected config over the build-time values', async () => {
     window.__GN33_CONFIG__ = {
-      apiUrl: 'https://app.gn33.eu',
+      apiUrl: 'https://blog.gn33.eu',
       issuer: 'gn33',
       env: 'prod',
     };
 
     const env = await loadEnv();
 
-    expect(env.API_URL).toBe('https://app.gn33.eu');
+    expect(env.API_URL).toBe('https://blog.gn33.eu');
     expect(env.ISSUER).toBe('gn33');
     expect(env.IS_DEVELOPMENT).toBe(false);
   });
@@ -73,7 +73,7 @@ describe('runtime configuration', () => {
   describe('during SSR', () => {
     beforeEach(() => {
       vi.stubEnv('SSR', true);
-      process.env.APP_API_URL = 'https://app.gn33.eu';
+      process.env.APP_API_URL = 'https://blog.gn33.eu';
     });
 
     afterEach(() => {
@@ -87,7 +87,7 @@ describe('runtime configuration', () => {
 
       const env = await loadEnv();
 
-      expect(env.API_URL).toBe('https://app.gn33.eu');
+      expect(env.API_URL).toBe('https://blog.gn33.eu');
     });
 
     it('falls back to the build-time value when APP_API_URL is unset, for pnpm dev', async () => {
