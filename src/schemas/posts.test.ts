@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MAX_TAGS, MAX_TAG_LENGTH, findTagsProblem, isHttpsUrl } from '@/schemas/posts';
+import { MAX_TAGS, MAX_TAG_LENGTH, findTagsProblem, isHttpsUrl, isImageRef } from '@/schemas/posts';
 
 describe('isHttpsUrl', () => {
   it.each(['https://example.com/a.jpg', 'https://cdn.example.com/x?y=1'])(
@@ -15,6 +15,22 @@ describe('isHttpsUrl', () => {
     'https://exa mple.com',
     '',
   ])('rejects %s', (value) => expect(isHttpsUrl(value)).toBe(false));
+});
+
+describe('isImageRef', () => {
+  it.each([
+    'https://example.com/a.jpg',
+    '/v1/post-images/3f2b8c1e-9d4a-4e7b-8a1c-2b6d5e4f3a10.png',
+    '/v1/post-images/3f2b8c1e-9d4a-4e7b-8a1c-2b6d5e4f3a10.jpeg',
+  ])('accepts %s', (value) => expect(isImageRef(value)).toBe(true));
+
+  it.each([
+    'http://example.com/a.jpg',
+    '/v1/post-images/../../etc/passwd',
+    '/v1/post-images/abc.png',
+    '/v1/files/download-picture/x/y.png',
+    '',
+  ])('rejects %s', (value) => expect(isImageRef(value)).toBe(false));
 });
 
 describe('findTagsProblem', () => {

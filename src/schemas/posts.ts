@@ -97,6 +97,13 @@ export const isHttpsUrl = (value: string): boolean => {
   }
 };
 
+/** Site-relative path `PostImageController` returns after an upload; mirrors `GalleryImageDto.IMAGE_REF`. */
+const UPLOADED_IMAGE_PATH = /^\/v1\/post-images\/[0-9a-f-]{36}\.(jpg|jpeg|png)$/;
+
+/** A cover/gallery image is either a hotlinked https URL or an uploaded image's path. */
+export const isImageRef = (value: string): boolean =>
+  UPLOADED_IMAGE_PATH.test(value) || isHttpsUrl(value);
+
 // Mirror the backend limits in PostServiceImpl / PostSaveRequestDto.
 export const MAX_TAGS = 20;
 export const MAX_TAG_LENGTH = 60;

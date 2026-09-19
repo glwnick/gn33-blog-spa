@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { AuthorAvatar } from '@/components/author-avatar';
 import { useTranslation } from '@/hooks/use-translation';
 import { formatDate } from '@/lib/formatting';
+import { resolveImageUrl } from '@/lib/image-url';
 
 type PostCardProps = {
   readonly post: PostSummary;
@@ -21,7 +22,7 @@ export function PostCard({ post }: PostCardProps) {
       <div className="aspect-video w-full overflow-hidden bg-muted">
         {post.coverImageUrl && (
           <img
-            src={post.coverImageUrl}
+            src={resolveImageUrl(post.coverImageUrl)}
             alt=""
             className="size-full object-cover transition-transform group-hover:scale-105"
           />

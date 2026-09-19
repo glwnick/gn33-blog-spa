@@ -91,6 +91,10 @@ const API_ENDPOINTS = {
     >,
   },
 
+  postImages: {
+    upload: '/v1/post-images',
+  },
+
   push: {
     publicKey: '/v1/push/public-key',
     subscriptions: '/v1/push/subscriptions',

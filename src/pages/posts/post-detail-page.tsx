@@ -10,6 +10,7 @@ import { CommentSection } from '@/pages/posts/comment-list';
 import { postOptions } from '@/query-options/post-options';
 import { useTranslation } from '@/hooks/use-translation';
 import { formatDate } from '@/lib/formatting';
+import { resolveImageUrl } from '@/lib/image-url';
 
 type PostDetailPageProps = {
   readonly postId: string;
@@ -63,7 +64,7 @@ export function PostDetailPage({ postId }: PostDetailPageProps) {
 
         {post.coverImageUrl && (
           <img
-            src={post.coverImageUrl}
+            src={resolveImageUrl(post.coverImageUrl)}
             alt=""
             className="aspect-video w-full rounded-xl object-cover"
           />
@@ -80,7 +81,7 @@ export function PostDetailPage({ postId }: PostDetailPageProps) {
               {post.gallery.map((image, index) => (
                 <figure key={index} className="flex flex-col gap-1.5">
                   <img
-                    src={image.imageUrl}
+                    src={resolveImageUrl(image.imageUrl)}
                     alt={image.caption ?? ''}
                     className="aspect-square w-full rounded-lg object-cover"
                   />

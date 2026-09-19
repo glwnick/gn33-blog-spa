@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useQueryClient } from '@tanstack/react-query';
 import { Plus, X } from 'lucide-react';
@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Markdown } from '@/components/ui/markdown';
+import { ImageRefInput } from '@/pages/write/image-ref-input';
 import { HeaderAlert } from '@/components/header-alert';
 import { POST_KEY } from '@/query-options/post-options';
 import { createPost, updatePost } from '@/api/posts-api';
@@ -20,7 +21,7 @@ import {
   MAX_TAG_LENGTH,
   emptyPostSaveInput,
   findTagsProblem,
-  isHttpsUrl,
+  isImageRef,
 } from '@/schemas/posts';
 import { useAlertMutation } from '@/hooks/use-alert-mutation';
 import { useTranslation } from '@/hooks/use-translation';
@@ -62,6 +63,14 @@ export function PostEditorPage({ post }: PostEditorPageProps) {
     },
   });
 
+  // Uploads in flight. A finished upload writes into its gallery row by index, so removing any row (which shifts
+  // the indices) or publishing (which would drop the pending image) has to wait for them.
+  const [uploadsInFlight, setUploadsInFlight] = useState(0);
+  const onUploadPendingChange = useCallback(
+    (pending: boolean) => setUploadsInFlight((n) => n + (pending ? 1 : -1)),
+    [],
+  );
+
   const setField = <TKey extends keyof PostSaveInput>(
     key: TKey,
     value: PostSaveInput[TKey],
@@ -92,15 +101,16 @@ export function PostEditorPage({ post }: PostEditorPageProps) {
     }));
 
   const coverInvalid =
-    draft.coverImageUrl !== null && !isHttpsUrl(draft.coverImageUrl);
+    draft.coverImageUrl !== null && !isImageRef(draft.coverImageUrl);
   const isGalleryRowInvalid = (image: GalleryImage) =>
-    image.imageUrl.trim() !== '' && !isHttpsUrl(image.imageUrl);
+    image.imageUrl.trim() !== '' && !isImageRef(image.imageUrl);
   const tagsProblem = findTagsProblem(draft.tagsInput);
   const bodyTooLong = draft.bodyMarkdown.length > MAX_BODY_LENGTH;
   const canPublish =
     draft.title.trim().length > 0 &&
     draft.bodyMarkdown.trim().length > 0 &&
     !coverInvalid &&
+    uploadsInFlight === 0 &&
     tagsProblem === null &&
     !bodyTooLong &&
     !draft.gallery.some(isGalleryRowInvalid);
@@ -165,12 +175,13 @@ export function PostEditorPage({ post }: PostEditorPageProps) {
             <FieldLabel htmlFor="post-cover">
               {t('editorCoverImageLabel')}
             </FieldLabel>
-            <Input
+            <ImageRefInput
               id="post-cover"
               value={draft.coverImageUrl ?? ''}
-              onChange={(event) =>
-                setField('coverImageUrl', event.target.value || null)
+              onValueChange={(value) =>
+                setField('coverImageUrl', value || null)
               }
+              onPendingChange={onUploadPendingChange}
               placeholder={t('editorCoverImagePlaceholder')}
               aria-invalid={coverInvalid}
             />
@@ -223,11 +234,12 @@ export function PostEditorPage({ post }: PostEditorPageProps) {
               {draft.gallery.map((image, index) => (
                 <div key={index} className="flex items-start gap-2">
                   <div className="flex flex-1 flex-col gap-2">
-                    <Input
+                    <ImageRefInput
                       value={image.imageUrl}
-                      onChange={(event) =>
-                        setGalleryImage(index, { imageUrl: event.target.value })
+                      onValueChange={(value) =>
+                        setGalleryImage(index, { imageUrl: value })
                       }
+                      onPendingChange={onUploadPendingChange}
                       placeholder={t('editorGalleryImageUrlPlaceholder')}
                       aria-invalid={isGalleryRowInvalid(image)}
                     />
@@ -249,6 +261,7 @@ export function PostEditorPage({ post }: PostEditorPageProps) {
                     variant="ghost"
                     size="icon"
                     aria-label={t('editorGalleryRemove')}
+                    disabled={uploadsInFlight > 0}
                     onClick={() => removeGalleryImage(index)}
                   >
                     <X className="size-4" />
