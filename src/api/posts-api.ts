@@ -12,9 +12,10 @@ export const getFeed = async (
   authorId: string | undefined,
   page: number,
   size: number,
+  query?: string,
 ): Promise<Page<PostSummary>> => {
   const res = await api.get<PageResponse<PostSummary>>(API_ENDPOINTS.posts.feed, {
-    params: { authorId, page, size },
+    params: { authorId, q: query || undefined, page, size },
   });
   return {
     ...res.data.page,

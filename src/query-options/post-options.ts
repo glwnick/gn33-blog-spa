@@ -13,10 +13,11 @@ export const feedOptions = (
   authorId: string | undefined,
   page: number,
   size: number,
+  query?: string,
 ) => {
   return queryOptions({
-    queryKey: [POST_KEY, 'feed', authorId, page, size],
-    queryFn: () => getFeed(authorId, page, size),
+    queryKey: [POST_KEY, 'feed', authorId, page, size, query ?? ''],
+    queryFn: () => getFeed(authorId, page, size, query),
     placeholderData: keepPreviousData,
     staleTime: DEFAULT_STALE_TIME,
   });
