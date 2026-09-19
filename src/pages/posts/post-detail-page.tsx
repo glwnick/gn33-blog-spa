@@ -1,14 +1,16 @@
 import { Suspense } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Markdown } from '@/components/ui/markdown';
 import { ZoomableImage } from '@/components/zoomable-image';
 import { AuthorAvatar } from '@/components/author-avatar';
 import { Skeleton } from '@/components/ui/skeleton';
+import { PostActions } from '@/pages/posts/post-actions';
 import { CommentSection } from '@/pages/posts/comment-list';
 import { postOptions } from '@/query-options/post-options';
+import { useAuth } from '@/context/auth-provider';
 import { useTranslation } from '@/hooks/use-translation';
 import { formatDate } from '@/lib/formatting';
 import { resolveImageUrl } from '@/lib/image-url';
@@ -19,17 +21,30 @@ type PostDetailPageProps = {
 
 export function PostDetailPage({ postId }: PostDetailPageProps) {
   const { t } = useTranslation();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const { data: post } = useSuspenseQuery(postOptions(postId));
+  const isAuthor = user?.userId === post.author.id;
 
   return (
     <main className="mx-auto w-full max-w-3xl px-3 py-4 md:px-4 md:py-6">
-      <Link
-        to="/"
-        className="mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="size-4" />
-        {t('backToFeed')}
-      </Link>
+      <div className="mb-4 flex items-center justify-between gap-2">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="size-4" />
+          {t('backToFeed')}
+        </Link>
+        {isAuthor && (
+          <PostActions
+            postId={post.id}
+            title={post.title}
+            showView={false}
+            onDeleted={() => navigate({ to: '/dashboard' })}
+          />
+        )}
+      </div>
 
       <article className="flex flex-col gap-4">
         {post.tags.length > 0 && (
@@ -49,6 +64,8 @@ export function PostDetailPage({ postId }: PostDetailPageProps) {
             className="flex items-center gap-2 hover:text-foreground"
           >
             <AuthorAvatar
+              authorId={post.author.id}
+              profilePictureUrl={post.author.profilePictureUrl}
               firstName={post.author.firstName}
               lastName={post.author.lastName}
               size="sm"
