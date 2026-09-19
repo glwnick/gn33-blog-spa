@@ -292,6 +292,7 @@
   "pageNext": "Următor",
   "pageOfTotal": "Pagina {{page}} din {{total}}",
   "backToFeed": "Înapoi la flux",
+  "viewFullImage": "Vezi la dimensiune completă",
   "galleryTitle": "Galerie",
   "commentCount_one": "{{count}} comentariu",
   "commentCount_few": "{{count}} comentarii",

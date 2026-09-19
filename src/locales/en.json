@@ -291,6 +291,7 @@
   "pageNext": "Next",
   "pageOfTotal": "Page {{page}} of {{total}}",
   "backToFeed": "Back to feed",
+  "viewFullImage": "View full size",
   "galleryTitle": "Gallery",
   "commentCount_one": "{{count}} comment",
   "commentCount_other": "{{count}} comments",

@@ -4,6 +4,7 @@ import { Link } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Markdown } from '@/components/ui/markdown';
+import { ZoomableImage } from '@/components/zoomable-image';
 import { AuthorAvatar } from '@/components/author-avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { CommentSection } from '@/pages/posts/comment-list';
@@ -63,7 +64,7 @@ export function PostDetailPage({ postId }: PostDetailPageProps) {
         </div>
 
         {post.coverImageUrl && (
-          <img
+          <ZoomableImage
             src={resolveImageUrl(post.coverImageUrl)}
             alt=""
             className="aspect-video w-full rounded-xl object-cover"
@@ -80,7 +81,7 @@ export function PostDetailPage({ postId }: PostDetailPageProps) {
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
               {post.gallery.map((image, index) => (
                 <figure key={index} className="flex flex-col gap-1.5">
-                  <img
+                  <ZoomableImage
                     src={resolveImageUrl(image.imageUrl)}
                     alt={image.caption ?? ''}
                     className="aspect-square w-full rounded-lg object-cover"
