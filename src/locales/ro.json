@@ -322,6 +322,7 @@
   "editorPreviewTab": "Previzualizare",
   "editorPreviewEmpty": "Nimic de previzualizat încă.",
   "editorGalleryImageUrlPlaceholder": "URL imagine",
+  "editorImageUrlHttps": "Introdu un URL de imagine care începe cu https://.",
   "editorGalleryCaptionPlaceholder": "Descriere (opțional)",
   "editorGalleryRemove": "Elimină imaginea",
   "editorGalleryAdd": "Adaugă imagine",

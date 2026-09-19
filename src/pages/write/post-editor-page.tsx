@@ -7,13 +7,13 @@ import { AppContent } from '@/components/layout/app-content';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Markdown } from '@/components/ui/markdown';
 import { HeaderAlert } from '@/components/header-alert';
 import { POST_KEY } from '@/query-options/post-options';
 import { createPost, updatePost } from '@/api/posts-api';
-import { emptyPostSaveInput } from '@/schemas/posts';
+import { emptyPostSaveInput, isHttpsUrl } from '@/schemas/posts';
 import { useAlertMutation } from '@/hooks/use-alert-mutation';
 import { useTranslation } from '@/hooks/use-translation';
 
@@ -39,9 +39,15 @@ export function PostEditorPage({ post }: PostEditorPageProps) {
   const queryClient = useQueryClient();
   const [draft, setDraft] = useState<PostSaveInput>(() => toSaveInput(post));
 
+  // A gallery row left blank is an unfinished "Add image" click, not a request for an empty image.
+  const payload: PostSaveInput = {
+    ...draft,
+    gallery: draft.gallery.filter((image) => image.imageUrl.trim() !== ''),
+  };
+
   const { mutate, isPending, alertError, clearAlertError } = useAlertMutation({
     mutationFn: () =>
-      post ? updatePost(post.id, draft) : createPost(draft),
+      post ? updatePost(post.id, payload) : createPost(payload),
     onSuccess: async (saved) => {
       await queryClient.invalidateQueries({ queryKey: [POST_KEY] });
       await navigate({ to: '/posts/$postId', params: { postId: saved.id } });
@@ -77,8 +83,15 @@ export function PostEditorPage({ post }: PostEditorPageProps) {
       gallery: prev.gallery.filter((_, i) => i !== index),
     }));
 
+  const coverInvalid =
+    draft.coverImageUrl !== null && !isHttpsUrl(draft.coverImageUrl);
+  const isGalleryRowInvalid = (image: GalleryImage) =>
+    image.imageUrl.trim() !== '' && !isHttpsUrl(image.imageUrl);
   const canPublish =
-    draft.title.trim().length > 0 && draft.bodyMarkdown.trim().length > 0;
+    draft.title.trim().length > 0 &&
+    draft.bodyMarkdown.trim().length > 0 &&
+    !coverInvalid &&
+    !draft.gallery.some(isGalleryRowInvalid);
 
   return (
     <AppContent title={t(post ? 'editorEditTitle' : 'editorCreateTitle')}>
@@ -133,7 +146,9 @@ export function PostEditorPage({ post }: PostEditorPageProps) {
                 setField('coverImageUrl', event.target.value || null)
               }
               placeholder={t('editorCoverImagePlaceholder')}
+              aria-invalid={coverInvalid}
             />
+            {coverInvalid && <FieldError>{t('editorImageUrlHttps')}</FieldError>}
           </Field>
 
           <Field>
@@ -180,7 +195,11 @@ export function PostEditorPage({ post }: PostEditorPageProps) {
                         setGalleryImage(index, { imageUrl: event.target.value })
                       }
                       placeholder={t('editorGalleryImageUrlPlaceholder')}
+                      aria-invalid={isGalleryRowInvalid(image)}
                     />
+                    {isGalleryRowInvalid(image) && (
+                      <FieldError>{t('editorImageUrlHttps')}</FieldError>
+                    )}
                     <Input
                       value={image.caption ?? ''}
                       onChange={(event) =>

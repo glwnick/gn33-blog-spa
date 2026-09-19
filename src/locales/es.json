@@ -320,6 +320,7 @@
   "editorPreviewTab": "Vista previa",
   "editorPreviewEmpty": "Nada que previsualizar todavía.",
   "editorGalleryImageUrlPlaceholder": "URL de la imagen",
+  "editorImageUrlHttps": "Introduce una URL de imagen que empiece por https://.",
   "editorGalleryCaptionPlaceholder": "Descripción (opcional)",
   "editorGalleryRemove": "Quitar imagen",
   "editorGalleryAdd": "Añadir imagen",

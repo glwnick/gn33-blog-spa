@@ -81,3 +81,18 @@ export const emptyPostSaveInput: PostSaveInput = {
   tagsInput: '',
   gallery: [],
 };
+
+/**
+ * Mirrors the backend's `https://` rule for cover and gallery image URLs. A blank value is not a URL at all, so
+ * callers decide separately whether blank is allowed (the cover is optional, a blank gallery row is dropped).
+ */
+export const isHttpsUrl = (value: string): boolean => {
+  if (/\s/.test(value)) {
+    return false;
+  }
+  try {
+    return new URL(value).protocol === 'https:';
+  } catch {
+    return false;
+  }
+};
