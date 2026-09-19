@@ -1,8 +1,5 @@
 import enTranslations from '../locales/en.json';
-import deTranslations from '../locales/de.json';
 import roTranslations from '../locales/ro.json';
-import esTranslations from '../locales/es.json';
-import frTranslations from '../locales/fr.json';
 
 // Pure, dependency-free data: no import of `i18next`, `lib/i18n.ts`, or `lib/server-i18n.ts`. Both of
 // those files need this data, and `lib/i18n.ts` (the shared client/server instance) also needs to call
@@ -15,21 +12,12 @@ export const resources = {
   en: {
     translation: enTranslations,
   },
-  de: {
-    translation: deTranslations,
-  },
   ro: {
     translation: roTranslations,
   },
-  es: {
-    translation: esTranslations,
-  },
-  fr: {
-    translation: frTranslations,
-  },
 } as const;
 
-export const supportedLanguages = ['en', 'es', 'fr', 'de', 'ro'];
+export const supportedLanguages = ['en', 'ro'];
 
 // The single source of truth for "no other signal decided the language" - the i18next fallback, the
 // SSR per-request resolver's own fallback, and the language switcher's display fallback all read this

@@ -10,17 +10,11 @@ import {
 } from '@/components/ui/select';
 import { useAuth } from '@/context/auth-provider';
 import { defaultLanguage, supportedLanguages } from '@/lib/i18n';
-import deFlag from '@/assets/flags/de.png';
 import roFlag from '@/assets/flags/ro.png';
-import esFlag from '@/assets/flags/es.png';
-import frFlag from '@/assets/flags/fr.png';
 import enFlag from '@/assets/flags/gb.png';
 
 const flagByCode: Record<string, string> = {
   en: enFlag,
-  de: deFlag,
-  es: esFlag,
-  fr: frFlag,
   ro: roFlag,
 };
 

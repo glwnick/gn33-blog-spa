@@ -1,42 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import en from './en.json';
 import ro from './ro.json';
-import de from './de.json';
-import es from './es.json';
-import fr from './fr.json';
 
 /**
- * Locks every locale file (en, ro, de, es, fr) together for full key parity. All five became
- * equally maintained on 2026-08-31, when the owner explicitly retired the earlier "only en/ro,
- * de/es/fr are frozen and fall back to English" policy and had de/es/fr backfilled to match en
- * key-for-key - see `gn33-blog-app`'s analogous `MessageBundleParityTest` for the backend side of
- * the same change.
+ * Locks the maintained locale files (en, ro) together for key parity. de/es/fr were dropped on
+ * 2026-09-19; the backend keeps its own bundles.
  *
  * `en.json` is the source of truth (it's also what `TranslationKey` in `hooks/use-translation.ts`
- * is derived from), so a key missing from any other locale silently falls back to English rather
+ * is derived from), so a key missing from another locale silently falls back to English rather
  * than failing anything at runtime - this test is what actually catches that instead.
  */
 describe('locale parity', () => {
   const enKeys = new Set(Object.keys(en));
-
-  it.each([
-    ['de', de],
-    ['es', es],
-    ['fr', fr],
-  ] as const)('%s has exactly the same keys as en', (_lang, locale) => {
-    const localeKeys = new Set(Object.keys(locale));
-
-    const missingFromLocale = [...enKeys].filter((k) => !localeKeys.has(k));
-    const missingFromEn = [...localeKeys].filter((k) => !enKeys.has(k));
-
-    expect(missingFromLocale, 'keys in en.json missing from this locale').toEqual([]);
-    // A key present in a locale file but not en.json is either a stale/orphaned entry (nothing can
-    // reference it - `TranslationKey` is derived from en.json alone) or a rename that carried en.json
-    // to a new key name without carrying this locale's translation across too - the same failure
-    // mode `MessageBundleParityTest.everyKeyInEnglish_hasAnEquivalentInEveryMaintainedLocale_andViceVersa`
-    // guards on the backend.
-    expect(missingFromEn, 'keys in this locale missing from en.json (stale, or an un-carried rename)').toEqual([]);
-  });
 
   it('ro has every en key, plus only Romanian-specific plural variants', () => {
     const roKeys = new Set(Object.keys(ro));
