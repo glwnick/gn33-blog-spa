@@ -13,7 +13,15 @@ import { Markdown } from '@/components/ui/markdown';
 import { HeaderAlert } from '@/components/header-alert';
 import { POST_KEY } from '@/query-options/post-options';
 import { createPost, updatePost } from '@/api/posts-api';
-import { emptyPostSaveInput, isHttpsUrl } from '@/schemas/posts';
+import {
+  MAX_BODY_LENGTH,
+  MAX_TAGS,
+  MAX_TAGS_INPUT_LENGTH,
+  MAX_TAG_LENGTH,
+  emptyPostSaveInput,
+  findTagsProblem,
+  isHttpsUrl,
+} from '@/schemas/posts';
 import { useAlertMutation } from '@/hooks/use-alert-mutation';
 import { useTranslation } from '@/hooks/use-translation';
 
@@ -34,7 +42,7 @@ const toSaveInput = (post: PostDetail | undefined): PostSaveInput =>
     : emptyPostSaveInput;
 
 export function PostEditorPage({ post }: PostEditorPageProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [draft, setDraft] = useState<PostSaveInput>(() => toSaveInput(post));
@@ -87,10 +95,14 @@ export function PostEditorPage({ post }: PostEditorPageProps) {
     draft.coverImageUrl !== null && !isHttpsUrl(draft.coverImageUrl);
   const isGalleryRowInvalid = (image: GalleryImage) =>
     image.imageUrl.trim() !== '' && !isHttpsUrl(image.imageUrl);
+  const tagsProblem = findTagsProblem(draft.tagsInput);
+  const bodyTooLong = draft.bodyMarkdown.length > MAX_BODY_LENGTH;
   const canPublish =
     draft.title.trim().length > 0 &&
     draft.bodyMarkdown.trim().length > 0 &&
     !coverInvalid &&
+    tagsProblem === null &&
+    !bodyTooLong &&
     !draft.gallery.some(isGalleryRowInvalid);
 
   return (
@@ -132,7 +144,21 @@ export function PostEditorPage({ post }: PostEditorPageProps) {
               value={draft.tagsInput}
               onChange={(event) => setField('tagsInput', event.target.value)}
               placeholder={t('editorTagsPlaceholder')}
+              aria-invalid={tagsProblem !== null}
             />
+            {tagsProblem === 'tooMany' && (
+              <FieldError>{t('editorTagsTooMany', { max: MAX_TAGS })}</FieldError>
+            )}
+            {tagsProblem === 'tooLong' && (
+              <FieldError>
+                {t('editorTagTooLong', { max: MAX_TAG_LENGTH })}
+              </FieldError>
+            )}
+            {tagsProblem === 'inputTooLong' && (
+              <FieldError>
+                {t('editorTagsInputTooLong', { max: MAX_TAGS_INPUT_LENGTH })}
+              </FieldError>
+            )}
           </Field>
 
           <Field>
@@ -167,7 +193,15 @@ export function PostEditorPage({ post }: PostEditorPageProps) {
                   }
                   rows={16}
                   className="font-mono text-sm"
+                  aria-invalid={bodyTooLong}
                 />
+                {bodyTooLong && (
+                  <FieldError>
+                    {t('editorBodyTooLong', {
+                      max: MAX_BODY_LENGTH.toLocaleString(i18n.language),
+                    })}
+                  </FieldError>
+                )}
               </TabsContent>
               <TabsContent value="preview">
                 <div className="min-h-96 rounded-md border p-3">

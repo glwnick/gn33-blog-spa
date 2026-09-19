@@ -96,3 +96,31 @@ export const isHttpsUrl = (value: string): boolean => {
     return false;
   }
 };
+
+// Mirror the backend limits in PostServiceImpl / PostSaveRequestDto.
+export const MAX_TAGS = 20;
+export const MAX_TAG_LENGTH = 60;
+export const MAX_TAGS_INPUT_LENGTH = 1000;
+export const MAX_BODY_LENGTH = 50_000;
+
+export type TagsProblem = 'tooMany' | 'tooLong' | 'inputTooLong';
+
+/**
+ * Applies the backend's tag rules to the raw comma-separated field: entries are trimmed and lowercased,
+ * blanks dropped and duplicates collapsed before counting, exactly as `PostServiceImpl.resolveTags` does.
+ */
+export const findTagsProblem = (tagsInput: string): TagsProblem | null => {
+  if (tagsInput.length > MAX_TAGS_INPUT_LENGTH) {
+    return 'inputTooLong';
+  }
+  const names = new Set(
+    tagsInput
+      .split(',')
+      .map((tag) => tag.trim().toLowerCase())
+      .filter((tag) => tag !== ''),
+  );
+  if ([...names].some((name) => name.length > MAX_TAG_LENGTH)) {
+    return 'tooLong';
+  }
+  return names.size > MAX_TAGS ? 'tooMany' : null;
+};
