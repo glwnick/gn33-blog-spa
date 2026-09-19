@@ -89,6 +89,11 @@ const API_ENDPOINTS = {
       `/v1/files/download-picture/${userId}/${pictureName}`) as PathBuilder<
       [string, string]
     >,
+    /** Public (anonymous GET) thumbnail of an author's current picture, for bylines and comments. */
+    authorAvatar: ((userId: string, pictureName: string) =>
+      `/v1/users/${userId}/author-avatar/${encodeURIComponent(pictureName)}`) as PathBuilder<
+      [string, string]
+    >,
   },
 
   postImages: {

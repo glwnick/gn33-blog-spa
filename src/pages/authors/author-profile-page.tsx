@@ -25,6 +25,8 @@ export function AuthorProfilePage({ authorId }: AuthorProfilePageProps) {
       title={
         <div className="flex items-center gap-3">
           <AuthorAvatar
+            authorId={author.id}
+            profilePictureUrl={author.profilePictureUrl}
             firstName={author.firstName}
             lastName={author.lastName}
             size="lg"

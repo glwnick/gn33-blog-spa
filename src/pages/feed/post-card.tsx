@@ -42,6 +42,8 @@ export function PostCard({ post }: PostCardProps) {
         </p>
         <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
           <AuthorAvatar
+            authorId={post.author.id}
+            profilePictureUrl={post.author.profilePictureUrl}
             firstName={post.author.firstName}
             lastName={post.author.lastName}
             size="sm"

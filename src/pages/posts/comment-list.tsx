@@ -17,6 +17,8 @@ function CommentRow({ comment }: { readonly comment: Comment }) {
   return (
     <div className="flex gap-3">
       <AuthorAvatar
+        authorId={comment.author.id}
+        profilePictureUrl={comment.author.profilePictureUrl}
         firstName={comment.author.firstName}
         lastName={comment.author.lastName}
         size="sm"

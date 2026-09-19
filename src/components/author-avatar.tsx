@@ -1,7 +1,12 @@
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
+import { getInitials } from '@/lib/get-initials';
+import API_ENDPOINTS from '@/config/api-endpoints';
+import env from '@/config/env';
 
 type AuthorAvatarProps = {
+  readonly authorId: string;
+  readonly profilePictureUrl: string | null;
   readonly firstName: string;
   readonly lastName: string;
   readonly size?: 'default' | 'sm' | 'lg';
@@ -9,23 +14,28 @@ type AuthorAvatarProps = {
 };
 
 /**
- * Text-initials only, never a fetched photo - matches the design handoff's own author avatars ("Avatars are
- * text-initials badges, not photos"). Deliberate, not a shortcut: `/v1/files/**` sits behind
- * `anyRequest().authenticated()` in `SecurityConfig` (profile-picture thumbnails are for the account holder's
- * own settings pages, not for a public byline), so the feed, a post's byline, its comments and the author
- * profile screen - every one of them reachable by an anonymous visitor - would 401 on a real photo anyway.
+ * The author's thumbnail from the public `/v1/users/{id}/author-avatar/{file}` endpoint (`/v1/files/**` is
+ * authenticated, so an anonymous visitor could not load it), falling back to text initials while it loads, when
+ * the author has no picture, or if it fails.
  */
 export function AuthorAvatar({
+  authorId,
+  profilePictureUrl,
   firstName,
   lastName,
   size = 'default',
   className,
 }: AuthorAvatarProps) {
-  const initials =
-    (firstName.charAt(0) + lastName.charAt(0)).toUpperCase() || '?';
+  const initials = getInitials(`${firstName} ${lastName}`.trim()) || '?';
 
   return (
     <Avatar size={size} className={cn(className)}>
+      {profilePictureUrl ? (
+        <AvatarImage
+          src={`${env.API_URL}${API_ENDPOINTS.files.authorAvatar(authorId, profilePictureUrl)}`}
+          alt=""
+        />
+      ) : null}
       <AvatarFallback>{initials}</AvatarFallback>
     </Avatar>
   );
