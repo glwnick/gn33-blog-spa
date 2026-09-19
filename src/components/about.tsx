@@ -20,7 +20,6 @@ import {
   Route,
   Server,
   ShieldCheck,
-  Store,
   Table2,
   TableProperties,
   UserRound,
@@ -296,7 +295,7 @@ export const About = () => {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Store className="size-5" />
+            <BookOpen className="size-5" />
             <CardTitle>{t('aboutProjectTitle')}</CardTitle>
           </div>
         </CardHeader>

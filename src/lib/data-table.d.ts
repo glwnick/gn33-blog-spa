@@ -21,7 +21,7 @@ declare module '@tanstack/react-table' {
     filterFormat?: (value: unknown) => string | null;
     // The View menu's column-toggle label. Falls back to `t(column.id)` when absent, which only matches a
     // column's real header when the id happens to equal its translation key - set this whenever a column's
-    // header is titled from a different key (e.g. `orderCount` headed "Orders").
+    // header is titled from a different key (e.g. `createdDate` headed "Joined").
     label?: string;
   }
 }

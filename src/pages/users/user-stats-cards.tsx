@@ -13,8 +13,8 @@ export function UserStatsCards() {
   return (
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
       <StatCard
-        title={t('totalCustomers')}
-        value={stats?.totalCustomers}
+        title={t('totalUsers')}
+        value={stats?.totalUsers}
         icon={<Users size={18} />}
         isPending={isPending}
       />

@@ -23,7 +23,7 @@ const Logo = ({
       />
       <span
         className={cn(
-          'bg-linear-to-r from-purple-600 via-purple-800 to-blue-600 bg-clip-text text-xl font-semibold text-transparent dark:via-purple-300',
+          'text-xl font-semibold text-primary-strong',
           textClassName,
         )}
       >

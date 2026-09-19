@@ -14,8 +14,8 @@
   --card-foreground: oklch(0.148 0.004 228.8);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.148 0.004 228.8);
-  --primary: oklch(0.518 0.253 323.949);
-  --primary-foreground: oklch(0.977 0.017 320.058);
+  --primary: oklch(0.56 0.15 44);
+  --primary-foreground: oklch(0.985 0.01 70);
   --secondary: oklch(0.967 0.001 286.375);
   --secondary-foreground: oklch(0.21 0.006 285.885);
   --muted: oklch(0.963 0.002 197.1);
@@ -27,12 +27,12 @@
   --border: oklch(0.925 0.005 214.3);
   --input: oklch(0.925 0.005 214.3);
   --ring: oklch(0.723 0.014 214.4);
-  --chart-1: oklch(0.833 0.145 321.434);
-  --chart-2: oklch(0.667 0.295 322.15);
-  --chart-3: oklch(0.591 0.293 322.896);
-  --chart-4: oklch(0.518 0.253 323.949);
-  --chart-5: oklch(0.452 0.211 324.591);
-  /* `--primary` sits at the chart-4 step of this same magenta ladder in light mode, so its "strong" emphasis
+  --chart-1: oklch(0.83 0.1 60);
+  --chart-2: oklch(0.72 0.15 50);
+  --chart-3: oklch(0.64 0.16 46);
+  --chart-4: oklch(0.56 0.15 44);
+  --chart-5: oklch(0.48 0.13 42);
+  /* `--primary` sits at the chart-4 step of this same terracotta ladder in light mode, so its "strong" emphasis
      variant (link-row hovers, checkmark/checked icons) is one step further down the ladder - darker and more
      saturated for contrast against a light background - rather than a new, disconnected color. */
   --primary-strong: var(--chart-5);
@@ -65,8 +65,8 @@
   --card-foreground: oklch(0.987 0.002 197.1);
   --popover: oklch(0.218 0.008 223.9);
   --popover-foreground: oklch(0.987 0.002 197.1);
-  --primary: oklch(0.452 0.211 324.591);
-  --primary-foreground: oklch(0.977 0.017 320.058);
+  --primary: oklch(0.48 0.13 42);
+  --primary-foreground: oklch(0.985 0.01 70);
   --secondary: oklch(0.274 0.006 286.033);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.275 0.011 216.9);
@@ -78,11 +78,11 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.56 0.021 213.5);
-  --chart-1: oklch(0.833 0.145 321.434);
-  --chart-2: oklch(0.667 0.295 322.15);
-  --chart-3: oklch(0.591 0.293 322.896);
-  --chart-4: oklch(0.518 0.253 323.949);
-  --chart-5: oklch(0.452 0.211 324.591);
+  --chart-1: oklch(0.83 0.1 60);
+  --chart-2: oklch(0.72 0.15 50);
+  --chart-3: oklch(0.64 0.16 46);
+  --chart-4: oklch(0.56 0.15 44);
+  --chart-5: oklch(0.48 0.13 42);
   /* `--primary` already sits at the darkest (chart-5) step of the ladder in dark mode, so going one more step
      dark would lose contrast against the dark background - "strong" instead steps up to chart-3, brighter
      and still saturated, for the same link-row-hover/checkmark-icon emphasis role as in light mode. */

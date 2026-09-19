@@ -1,5 +1,4 @@
-import { Mail, Phone } from 'lucide-react';
-import { FacebookIcon, InstagramIcon } from '@/assets/svg/svgLogos';
+import { Mail } from 'lucide-react';
 import CONTACT_INFO from '@/config/contact-info';
 import {
   Card,
@@ -61,34 +60,6 @@ export const Contact = () => {
             href={`mailto:${CONTACT_INFO.email}`}
             value={CONTACT_INFO.email}
           />
-          <ReachRow
-            icon={<Phone className="size-4" />}
-            label={t('phoneNumber')}
-            href={`tel:${CONTACT_INFO.phone.replaceAll(' ', '')}`}
-            value={CONTACT_INFO.phone}
-          />
-          <ReachRow
-            icon={<InstagramIcon />}
-            label={t('contactInstagram')}
-            href={CONTACT_INFO.instagramUrl}
-            value={CONTACT_INFO.instagramUrl.replace('https://', '')}
-          />
-          <ReachRow
-            icon={<FacebookIcon />}
-            label={t('contactFacebook')}
-            href={CONTACT_INFO.facebookUrl}
-            value={CONTACT_INFO.facebookUrl.replace('https://', '')}
-          />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('contactOpeningHours')}</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-1 text-sm text-muted-foreground">
-          <p>{t('contactHoursWeekdays')}</p>
-          <p>{t('contactHoursWeekend')}</p>
         </CardContent>
       </Card>
 

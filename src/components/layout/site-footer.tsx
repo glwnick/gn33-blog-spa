@@ -1,6 +1,6 @@
 import { createLink } from '@tanstack/react-router';
 import { FOOTER_NAV_ITEMS } from '@/components/layout/nav-config';
-import LEGAL_INFO from '@/config/legal-info';
+import { BRAND_NAME } from '@/config/brand';
 import { useTranslation } from '@/hooks/use-translation';
 import { cn } from '@/lib/utils';
 
@@ -23,13 +23,8 @@ const FooterNavLink = createLink(
 );
 
 /**
- * The site-wide footer, carrying the legal links and business identification data that used to
- * live in the top bar. See `nav-config.ts`'s `PUBLIC_NAV_ITEMS` for why they moved: a shop's top
- * bar should lead with product, not with terms.
- *
- * <p>Business identity, the ANPC notice and the SAL entity come from `config/legal-info.ts`
- * rather than a translation key, for the same reason `contact-info.ts` is separate: this is
- * business data, not copy, and today it is placeholder data pending Phase 0 (see that file).
+ * The site-wide footer: the legal links plus the copyright line. The brand name is a placeholder, see
+ * `config/brand.ts`.
  */
 export function SiteFooter() {
   const { t } = useTranslation();
@@ -46,29 +41,9 @@ export function SiteFooter() {
           ))}
         </nav>
 
-        <div className="flex flex-col gap-1 text-xs text-muted-foreground">
-          <p>
-            {t('footerBusinessIdentity', {
-              name: LEGAL_INFO.registeredName,
-              registrationNumber: LEGAL_INFO.registrationNumber,
-              cui: LEGAL_INFO.cui,
-              registeredOffice: LEGAL_INFO.registeredOffice,
-            })}
-          </p>
-          <p>
-            {t('footerAnpc')}{' '}
-            <a
-              href={LEGAL_INFO.anpcUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-4 hover:text-foreground"
-            >
-              anpc.ro
-            </a>
-          </p>
-          {LEGAL_INFO.salEntity === null && <p>{t('footerSalPending')}</p>}
-          <p>{t('footerCopyright', { year, name: LEGAL_INFO.registeredName })}</p>
-        </div>
+        <p className="text-xs text-muted-foreground">
+          {t('footerCopyright', { year, name: BRAND_NAME })}
+        </p>
       </div>
     </footer>
   );

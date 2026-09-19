@@ -17,7 +17,7 @@ import { deleteUser } from '@/api/user-api';
 import { SignInTypeBadge } from '@/components/sign-in-type/sing-in-type';
 import { ColumnHeader } from '@/components/data-table/column-header';
 import { AlertDialogDestructive } from '@/components/alert-dialog-destructive';
-import { formatDateTime, formatPrice } from '@/lib/formatting';
+import { formatDateTime } from '@/lib/formatting';
 
 import {
   COLUMN_ACTIONS,
@@ -166,26 +166,6 @@ export const columns = ({ t }: ColumnsOptions): Array<AppColumnDef<UserResponse>
         enabled={row.original.enabled}
         emailVerified={row.original.emailVerified}
       />
-    ),
-  },
-  {
-    accessorKey: 'orderCount',
-    header: ({ column }) => <ColumnHeader column={column} title={t('orders')} />,
-    enableSorting: false,
-    meta: { label: t('orders') },
-    cell: ({ row }) => (
-      <div className="text-right tabular-nums">{row.original.orderCount}</div>
-    ),
-  },
-  {
-    accessorKey: 'lifetimeTotal',
-    header: ({ column }) => <ColumnHeader column={column} title={t('lifetime')} />,
-    enableSorting: false,
-    meta: { label: t('lifetime') },
-    cell: ({ row }) => (
-      <div className="text-right font-medium tabular-nums">
-        {formatPrice(row.original.lifetimeTotal)}
-      </div>
     ),
   },
   {

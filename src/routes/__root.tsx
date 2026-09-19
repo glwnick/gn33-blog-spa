@@ -69,29 +69,29 @@ export const Route = createRootRouteWithContext<RouterContextType>()({
           'width=device-width, initial-scale=1.0, interactive-widget=resizes-content',
       },
       { httpEquiv: 'X-UA-Compatible', content: 'IE=edge' },
-      { title: 'gn33 - Online shop' },
-      { name: 'title', content: 'gn33 - Online shop' },
+      { title: 'GN33 Blog' },
+      { name: 'title', content: 'GN33 Blog' },
       {
         name: 'description',
         content:
-          'Handmade knitted and crocheted pieces, made to order and ready to ship. Shop gn33.',
+          'A community blog: read stories, publish your own posts and join the conversation.',
       },
       {
         name: 'keywords',
-        content: 'gn33, online shop, handmade, knitted, crocheted, e-commerce',
+        content: 'gn33, blog, stories, writing, community',
       },
-      { name: 'author', content: 'gn33' },
+      { name: 'author', content: 'GN33 Blog' },
       // Matches --primary in src/styles.css
-      { name: 'theme-color', content: '#a800b7' },
+      { name: 'theme-color', content: '#b95019' },
       // Open Graph / Facebook. Absolute URLs: a link preview is fetched by a crawler with no
       // page context, so a relative image path resolves against the wrong origin or not at all.
       { property: 'og:type', content: 'website' },
       { property: 'og:url', content: 'https://app.gn33.eu/' },
-      { property: 'og:title', content: 'gn33 - Online shop' },
+      { property: 'og:title', content: 'GN33 Blog' },
       {
         property: 'og:description',
         content:
-          'Handmade knitted and crocheted pieces, made to order and ready to ship. Shop gn33.',
+          'A community blog: read stories, publish your own posts and join the conversation.',
       },
       {
         property: 'og:image',
@@ -100,11 +100,11 @@ export const Route = createRootRouteWithContext<RouterContextType>()({
       // Twitter
       { property: 'twitter:card', content: 'summary_large_image' },
       { property: 'twitter:url', content: 'https://app.gn33.eu/' },
-      { property: 'twitter:title', content: 'gn33 - Online shop' },
+      { property: 'twitter:title', content: 'GN33 Blog' },
       {
         property: 'twitter:description',
         content:
-          'Handmade knitted and crocheted pieces, made to order and ready to ship. Shop gn33.',
+          'A community blog: read stories, publish your own posts and join the conversation.',
       },
       {
         property: 'twitter:image',

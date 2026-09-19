@@ -5,12 +5,12 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#0f172b",
-  "theme_color": "#bef264",
+  "background_color": "#1a1210",
+  "theme_color": "#B95019",
   "icons": [
     {
       "src": "/nLogoColorBG.png",
-      "sizes": "648x649",
+      "sizes": "648x648",
       "type": "image/png",
       "purpose": "any"
     },

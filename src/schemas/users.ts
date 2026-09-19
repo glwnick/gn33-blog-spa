@@ -124,9 +124,8 @@ export const userResponseSchema = auditListSchema.extend({
   phoneNumber: z.string().nullable(),
   lastModifiedBy: z.string(),
   lastModifiedDate: dateTimeSchema,
-  // Slice 7's Users-table Active/Blocked badge and Orders/Lifetime columns. `enabled` mirrors the same field
-  // `AccountStatusCard` already toggles individually; `lifetimeTotal` is a BigDecimal on the backend, which
-  // Jackson serializes as a plain JSON number, same as `price` elsewhere.
+  // The Users table's Active/Blocked badge. `enabled` mirrors the same field `AccountStatusCard` already
+  // toggles individually.
   enabled: z.boolean(),
   // M4, SECURITY-AUDIT-2026-09-15.md: distinct from `enabled` - lets `UserStatusBadge` tell a checkout-created
   // account still waiting on its verification link apart from one staff actually blocked, which look
@@ -136,8 +135,6 @@ export const userResponseSchema = auditListSchema.extend({
   // The Role column: the caller's highest role (ADMIN > MANAGER > USER), batched server-side rather than
   // carried per row from a lazy collection - see `UserServiceImpl.mergeRoles`.
   userRoleType: roleFilterSchema,
-  orderCount: z.number().int(),
-  lifetimeTotal: z.number(),
 });
 
 export type UserResponse = z.infer<typeof userResponseSchema>;
@@ -163,7 +160,7 @@ export type UserListFilters = Filters<UserResponse> & { search?: string };
 
 /** Slice 7's Users-table stat cards. */
 export const userStatsResponseSchema = z.object({
-  totalCustomers: z.number().int(),
+  totalUsers: z.number().int(),
   newThisMonth: z.number().int(),
   activeAccounts: z.number().int(),
   blockedAccounts: z.number().int(),

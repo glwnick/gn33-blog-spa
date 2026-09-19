@@ -21,28 +21,21 @@ const userFixture = {
   enabled: true,
   emailVerified: true,
   userRoleType: 'USER',
-  orderCount: 3,
-  lifetimeTotal: 450.5,
 };
 
 describe('userResponseSchema', () => {
-  it('parses the Orders/Lifetime columns, the Active/Blocked status and the Role column', () => {
+  it('parses the Active/Blocked status and the Role column', () => {
     const parsed = userResponseSchema.parse(userFixture);
-    expect(parsed.orderCount).toBe(3);
-    expect(parsed.lifetimeTotal).toBe(450.5);
     expect(parsed.enabled).toBe(true);
     expect(parsed.userRoleType).toBe('USER');
   });
 
-  it('parses a user with no orders', () => {
+  it('parses a disabled user', () => {
     const parsed = userResponseSchema.parse({
       ...userFixture,
       enabled: false,
-      orderCount: 0,
-      lifetimeTotal: 0,
     });
     expect(parsed.enabled).toBe(false);
-    expect(parsed.orderCount).toBe(0);
   });
 });
 
@@ -81,13 +74,13 @@ describe('userFiltersSchema', () => {
 describe('userStatsResponseSchema', () => {
   it('parses the four stat cards', () => {
     const parsed = userStatsResponseSchema.parse({
-      totalCustomers: 42,
+      totalUsers: 42,
       newThisMonth: 5,
       activeAccounts: 38,
       blockedAccounts: 4,
     });
     expect(parsed).toEqual({
-      totalCustomers: 42,
+      totalUsers: 42,
       newThisMonth: 5,
       activeAccounts: 38,
       blockedAccounts: 4,
