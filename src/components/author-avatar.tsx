@@ -29,14 +29,15 @@ export function AuthorAvatar({
   const initials = getInitials(`${firstName} ${lastName}`.trim()) || '?';
 
   return (
-    <Avatar size={size} className={cn(className)}>
+    <Avatar size={size} className={cn('rounded-lg after:rounded-lg', className)}>
       {profilePictureUrl ? (
         <AvatarImage
           src={`${env.API_URL}${API_ENDPOINTS.files.authorAvatar(authorId, profilePictureUrl)}`}
           alt=""
+          className="rounded-lg"
         />
       ) : null}
-      <AvatarFallback>{initials}</AvatarFallback>
+      <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
     </Avatar>
   );
 }
