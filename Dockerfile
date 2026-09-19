@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------
 # gn33-blog-spa production image. Built once, configured at runtime, served non-root.
-# Built and published by .github/workflows/release.yml. There is no deploy repo for the blog yet, so
-# nothing in version control describes how this image is run in production.
+# Built and published by .github/workflows/release.yml. How this image is run in production is described by
+# gn33-blog-deploy (docker-compose.spf.yml and README.md).
 #
 # Serves via a plain Node process rather than nginx: since the TanStack Start migration, the build
 # produces a Web-standard `fetch` handler (`dist/server/server.js`) that has to actually render
