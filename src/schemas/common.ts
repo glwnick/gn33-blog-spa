@@ -20,7 +20,7 @@ export const whatsappPhoneNumberSchema = z
   }, 'phoneNumber-invalid');
 
 export const preferredLanguageSchema = z.enum(
-  ['EN', 'ES', 'FR', 'DE', 'RO'],
+  ['EN', 'RO'],
   'invalid-type',
 );
 export type LanguageType = z.infer<typeof preferredLanguageSchema>;
