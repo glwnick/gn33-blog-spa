@@ -1,8 +1,10 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import { Plus } from 'lucide-react';
 import { AppContent } from '@/components/layout/app-content';
 import { buttonVariants } from '@/components/ui/button';
 import { AnchorLink } from '@/components/anchor-link';
+import { SearchForm } from '@/components/search-form';
 import { PostActions } from '@/pages/posts/post-actions';
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty';
 import { myPostsOptions } from '@/query-options/post-options';
@@ -12,10 +14,15 @@ import { cn } from '@/lib/utils';
 
 export const DASHBOARD_PAGE_SIZE = 50;
 
-export function DashboardPage() {
+type DashboardPageProps = {
+  readonly query: string;
+};
+
+export function DashboardPage({ query }: DashboardPageProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { data: posts } = useSuspenseQuery(
-    myPostsOptions(0, DASHBOARD_PAGE_SIZE),
+    myPostsOptions(0, DASHBOARD_PAGE_SIZE, query),
   );
 
   return (
@@ -35,11 +42,28 @@ export function DashboardPage() {
         </div>
       }
     >
+      {(query || posts.content.length > 0) && (
+        <SearchForm
+          query={query}
+          placeholder={t('dashboardSearchPlaceholder')}
+          onSearch={(next) =>
+            navigate({ to: '.', search: { q: next || undefined } })
+          }
+        />
+      )}
       {posts.content.length === 0 ? (
         <Empty>
           <EmptyHeader>
-            <EmptyTitle>{t('dashboardEmptyTitle')}</EmptyTitle>
-            <EmptyDescription>{t('dashboardEmptyDescription')}</EmptyDescription>
+            <EmptyTitle>
+              {query
+                ? t('searchEmptyTitle', { query })
+                : t('dashboardEmptyTitle')}
+            </EmptyTitle>
+            <EmptyDescription>
+              {query
+                ? t('searchEmptyDescription')
+                : t('dashboardEmptyDescription')}
+            </EmptyDescription>
           </EmptyHeader>
         </Empty>
       ) : (

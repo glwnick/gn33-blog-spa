@@ -1,9 +1,8 @@
-import { useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { AppContent } from '@/components/layout/app-content';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { SearchForm } from '@/components/search-form';
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from '@/components/ui/empty';
 import { PostCard } from '@/pages/feed/post-card';
 import { feedOptions } from '@/query-options/post-options';
@@ -42,9 +41,9 @@ export function FeedPage({ page, query }: FeedPageProps) {
         </div>
       }
     >
-      <FeedSearchForm
-        key={query}
+      <SearchForm
         query={query}
+        placeholder={t('searchPlaceholder')}
         onSearch={(next) => goTo(0, next)}
       />
 
@@ -53,12 +52,12 @@ export function FeedPage({ page, query }: FeedPageProps) {
           <EmptyHeader>
             <EmptyTitle>
               {query
-                ? t('feedSearchEmptyTitle', { query })
+                ? t('searchEmptyTitle', { query })
                 : t('feedEmptyTitle')}
             </EmptyTitle>
             <EmptyDescription>
               {query
-                ? t('feedSearchEmptyDescription')
+                ? t('searchEmptyDescription')
                 : t('feedEmptyDescription')}
             </EmptyDescription>
           </EmptyHeader>
@@ -97,51 +96,5 @@ export function FeedPage({ page, query }: FeedPageProps) {
         </>
       )}
     </AppContent>
-  );
-}
-
-type FeedSearchFormProps = {
-  readonly query: string;
-  readonly onSearch: (query: string) => void;
-};
-
-/**
- * Keyed on the URL's query by its parent, so back/forward or Clear remounts it with the new text instead of
- * this component mirroring the URL into state.
- */
-function FeedSearchForm({ query, onSearch }: FeedSearchFormProps) {
-  const { t } = useTranslation();
-  const [draft, setDraft] = useState(query);
-
-  return (
-    <form
-      role="search"
-      onSubmit={(event) => {
-        event.preventDefault();
-        onSearch(draft.trim());
-      }}
-      className="mb-6 flex max-w-xl items-center gap-2"
-    >
-      <Input
-        type="search"
-        value={draft}
-        maxLength={100}
-        onChange={(event) => setDraft(event.target.value)}
-        placeholder={t('feedSearchPlaceholder')}
-        aria-label={t('search')}
-      />
-      <Button
-        type="submit"
-        size="sm"
-        disabled={draft.trim().length === 1}
-      >
-        {t('search')}
-      </Button>
-      {query && (
-        <Button type="button" variant="ghost" size="sm" onClick={() => onSearch('')}>
-          {t('feedSearchClear')}
-        </Button>
-      )}
-    </form>
   );
 }

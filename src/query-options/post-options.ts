@@ -23,10 +23,10 @@ export const feedOptions = (
   });
 };
 
-export const myPostsOptions = (page: number, size: number) => {
+export const myPostsOptions = (page: number, size: number, query?: string) => {
   return queryOptions({
-    queryKey: [POST_KEY, 'mine', page, size],
-    queryFn: () => getMyPosts(page, size),
+    queryKey: [POST_KEY, 'mine', page, size, query ?? ''],
+    queryFn: () => getMyPosts(page, size, query),
     placeholderData: keepPreviousData,
     staleTime: DEFAULT_STALE_TIME,
   });

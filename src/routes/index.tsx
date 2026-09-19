@@ -1,18 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { z } from 'zod';
+import { searchQuerySchema } from '@/schemas/search-query';
 import { FEED_PAGE_SIZE, FeedPage } from '@/pages/feed/feed-page';
 import { feedOptions } from '@/query-options/post-options';
 
 const feedSearchSchema = z.object({
   page: z.number().int().min(0).catch(0).default(0),
-  // Mirrors the backend: a query under 2 characters is rejected there, so drop it here rather than 400 the loader.
-  q: z
-    .string()
-    .trim()
-    .max(100)
-    .transform((value) => (value.length < 2 ? '' : value))
-    .catch('')
-    .default(''),
+  q: searchQuerySchema,
 });
 
 /**

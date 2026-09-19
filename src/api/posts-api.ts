@@ -26,9 +26,10 @@ export const getFeed = async (
 export const getMyPosts = async (
   page: number,
   size: number,
+  query?: string,
 ): Promise<Page<PostSummary>> => {
   const res = await api.get<PageResponse<PostSummary>>(API_ENDPOINTS.posts.mine, {
-    params: { page, size },
+    params: { q: query || undefined, page, size },
   });
   return {
     ...res.data.page,

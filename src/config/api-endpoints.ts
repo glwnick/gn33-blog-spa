@@ -123,7 +123,7 @@ const API_ENDPOINTS = {
 
   posts: {
     feed: '/v1/posts', // query: authorId, q, page, size
-    mine: '/v1/posts/mine', // query: page, size
+    mine: '/v1/posts/mine', // query: q, page, size
     detail: ((postId: string) => `/v1/posts/${postId}`) as PathBuilder<
       [string]
     >,
