@@ -18,6 +18,7 @@ import { TopNav } from '@/components/layout/top-nav';
 import '@/styles.css';
 import { defaultLanguage } from '@/lib/i18n';
 import { getServerLanguage } from '@/lib/server-i18n';
+import { SITE_URL } from '@/config/brand';
 
 // `auth` is the plain session snapshot, not the full `AuthContextType`: `beforeLoad` runs outside
 // the React tree, so the context's callbacks (`login`, `logout`, ...) are neither available there
@@ -86,7 +87,7 @@ export const Route = createRootRouteWithContext<RouterContextType>()({
       // Open Graph / Facebook. Absolute URLs: a link preview is fetched by a crawler with no
       // page context, so a relative image path resolves against the wrong origin or not at all.
       { property: 'og:type', content: 'website' },
-      { property: 'og:url', content: 'https://blog.gn33.eu/' },
+      { property: 'og:url', content: `${SITE_URL}/` },
       { property: 'og:title', content: 'GN33 Blog' },
       {
         property: 'og:description',
@@ -95,11 +96,11 @@ export const Route = createRootRouteWithContext<RouterContextType>()({
       },
       {
         property: 'og:image',
-        content: 'https://blog.gn33.eu/nLogoColorBG.png',
+        content: `${SITE_URL}/nLogoColorBG.png`,
       },
       // Twitter
       { property: 'twitter:card', content: 'summary_large_image' },
-      { property: 'twitter:url', content: 'https://blog.gn33.eu/' },
+      { property: 'twitter:url', content: `${SITE_URL}/` },
       { property: 'twitter:title', content: 'GN33 Blog' },
       {
         property: 'twitter:description',
@@ -108,7 +109,7 @@ export const Route = createRootRouteWithContext<RouterContextType>()({
       },
       {
         property: 'twitter:image',
-        content: 'https://blog.gn33.eu/nLogoColorBG.png',
+        content: `${SITE_URL}/nLogoColorBG.png`,
       },
     ],
     links: [

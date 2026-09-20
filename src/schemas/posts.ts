@@ -45,6 +45,7 @@ export type PostSummary = z.infer<typeof postSummarySchema>;
 export const postDetailSchema = z.object({
   id: z.uuid(),
   title: z.string(),
+  excerpt: z.string(),
   bodyMarkdown: z.string(),
   coverImageUrl: z.string().nullable(),
   author: authorSummarySchema,

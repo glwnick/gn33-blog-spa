@@ -8,12 +8,14 @@ import { ZoomableImage } from '@/components/zoomable-image';
 import { AuthorAvatar } from '@/components/author-avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { PostActions } from '@/pages/posts/post-actions';
+import { ShareButton } from '@/pages/posts/share-button';
 import { CommentSection } from '@/pages/posts/comment-list';
 import { postOptions } from '@/query-options/post-options';
 import { useAuth } from '@/context/auth-provider';
 import { useTranslation } from '@/hooks/use-translation';
 import { formatDate } from '@/lib/formatting';
 import { resolveImageUrl } from '@/lib/image-url';
+import { postUrl } from '@/lib/post-share';
 
 type PostDetailPageProps = {
   readonly postId: string;
@@ -36,14 +38,17 @@ export function PostDetailPage({ postId }: PostDetailPageProps) {
           <ArrowLeft className="size-4" />
           {t('backToFeed')}
         </Link>
-        {isAuthor && (
-          <PostActions
-            postId={post.id}
-            title={post.title}
-            showView={false}
-            onDeleted={() => navigate({ to: '/dashboard' })}
-          />
-        )}
+        <div className="flex items-center gap-2">
+          <ShareButton url={postUrl(post.id)} title={post.title} />
+          {isAuthor && (
+            <PostActions
+              postId={post.id}
+              title={post.title}
+              showView={false}
+              onDeleted={() => navigate({ to: '/dashboard' })}
+            />
+          )}
+        </div>
       </div>
 
       <article className="flex flex-col gap-4">
