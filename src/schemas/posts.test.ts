@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { MAX_TAGS, MAX_TAG_LENGTH, findTagsProblem, isHttpsUrl, isImageRef } from '@/schemas/posts';
+import type { PostDetail } from '@/schemas/posts';
+import {
+  MAX_TAGS,
+  MAX_TAG_LENGTH,
+  emptyPostSaveInput,
+  findTagsProblem,
+  isHttpsUrl,
+  isImageRef,
+  postToSaveInput,
+} from '@/schemas/posts';
 
 describe('isHttpsUrl', () => {
   it.each(['https://example.com/a.jpg', 'https://cdn.example.com/x?y=1'])(
@@ -53,5 +62,33 @@ describe('findTagsProblem', () => {
 
   it('flags a raw field over the backend size cap', () => {
     expect(findTagsProblem('a,'.repeat(501))).toBe('inputTooLong');
+  });
+});
+
+describe('postToSaveInput', () => {
+  const post = {
+    title: 'T',
+    excerpt: 'Derived from the body.',
+    customExcerpt: null,
+    bodyMarkdown: 'Derived from the body.',
+    coverImageUrl: null,
+    tags: ['a', 'b'],
+    gallery: [],
+  } as unknown as PostDetail;
+
+  it('is the blank form for a new post', () => {
+    expect(postToSaveInput(undefined)).toBe(emptyPostSaveInput);
+  });
+
+  it('prefills a hand-written excerpt', () => {
+    expect(postToSaveInput({ ...post, customExcerpt: 'Mine' }).excerpt).toBe('Mine');
+  });
+
+  it('leaves an auto-derived excerpt blank so it keeps following the body', () => {
+    expect(postToSaveInput(post).excerpt).toBeNull();
+  });
+
+  it('joins the tags for the raw tags field', () => {
+    expect(postToSaveInput(post).tagsInput).toBe('a, b');
   });
 });

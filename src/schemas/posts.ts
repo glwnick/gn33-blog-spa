@@ -46,6 +46,8 @@ export const postDetailSchema = z.object({
   id: z.uuid(),
   title: z.string(),
   excerpt: z.string(),
+  // Defaults to null so a frontend rolled out before the backend still parses older responses.
+  customExcerpt: z.string().nullable().default(null),
   bodyMarkdown: z.string(),
   coverImageUrl: z.string().nullable(),
   author: authorSummarySchema,
@@ -82,6 +84,20 @@ export const emptyPostSaveInput: PostSaveInput = {
   tagsInput: '',
   gallery: [],
 };
+
+/** Prefills the editor: a blank form for a new post, the post's own values for an edit. */
+export const postToSaveInput = (post: PostDetail | undefined): PostSaveInput =>
+  post
+    ? {
+        title: post.title,
+        // Only an excerpt the author wrote; an auto-derived one stays blank so it keeps following the body.
+        excerpt: post.customExcerpt,
+        bodyMarkdown: post.bodyMarkdown,
+        coverImageUrl: post.coverImageUrl,
+        tagsInput: post.tags.join(', '),
+        gallery: post.gallery,
+      }
+    : emptyPostSaveInput;
 
 /**
  * Mirrors the backend's `https://` rule for cover and gallery image URLs. A blank value is not a URL at all, so

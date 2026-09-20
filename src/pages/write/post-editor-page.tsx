@@ -19,9 +19,9 @@ import {
   MAX_TAGS,
   MAX_TAGS_INPUT_LENGTH,
   MAX_TAG_LENGTH,
-  emptyPostSaveInput,
   findTagsProblem,
   isImageRef,
+  postToSaveInput,
 } from '@/schemas/posts';
 import { useAlertMutation } from '@/hooks/use-alert-mutation';
 import { useTranslation } from '@/hooks/use-translation';
@@ -30,23 +30,11 @@ type PostEditorPageProps = {
   readonly post?: PostDetail;
 };
 
-const toSaveInput = (post: PostDetail | undefined): PostSaveInput =>
-  post
-    ? {
-        title: post.title,
-        excerpt: null,
-        bodyMarkdown: post.bodyMarkdown,
-        coverImageUrl: post.coverImageUrl,
-        tagsInput: post.tags.join(', '),
-        gallery: post.gallery,
-      }
-    : emptyPostSaveInput;
-
 export function PostEditorPage({ post }: PostEditorPageProps) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [draft, setDraft] = useState<PostSaveInput>(() => toSaveInput(post));
+  const [draft, setDraft] = useState<PostSaveInput>(() => postToSaveInput(post));
 
   // A gallery row left blank is an unfinished "Add image" click, not a request for an empty image.
   const payload: PostSaveInput = {
