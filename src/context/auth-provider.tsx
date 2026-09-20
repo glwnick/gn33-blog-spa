@@ -131,6 +131,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [logout]);
 
   useEffect(() => {
+    // Already resolved before mount: `hydrateAuth` (`lib/dehydrated-auth.ts`) found the server saw no refresh
+    // cookie, so the visitor is anonymous and the exchange could only fail.
+    if (!getAuthSnapshot().isInitializing) return;
+
     const loadAuth = async () => {
       try {
         const response = await refreshAccessToken();

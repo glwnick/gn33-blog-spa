@@ -8,6 +8,7 @@ import {
   resetAuthSnapshot,
   subscribeToAuthSnapshot,
 } from '@/lib/auth-token';
+import { hydrateAuth } from '@/lib/dehydrated-auth';
 
 const { refreshAccessToken } = vi.hoisted(() => ({
   refreshAccessToken: vi.fn(),
@@ -18,6 +19,7 @@ vi.mock('@/api/auth-api', () => ({ refreshAccessToken }));
 describe('AuthProvider', () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    refreshAccessToken.mockReset();
     // The session lives in a module store (see `lib/auth-token.ts`), which outlives `render()` -
     // without this, one test's adopted session becomes the next test's starting state.
     resetAuthSnapshot();
@@ -37,6 +39,45 @@ describe('AuthProvider', () => {
     expect(result.current.isInitializing).toBe(true);
     expect(result.current.accessToken).toBeNull();
     expect(result.current.user).toBeNull();
+  });
+
+  // The server saw no refresh cookie (`hydrateAuth`), so the visitor is anonymous and the exchange would only
+  // 400 ("No refreshToken!"): the provider must not send it.
+  it('does not call refresh when the server reported no refresh cookie', () => {
+    hydrateAuth({ user: null, hasRefreshCookie: false });
+
+    const { result } = renderHook(() => useAuth(), {
+      wrapper: AuthProvider,
+    });
+
+    expect(refreshAccessToken).not.toHaveBeenCalled();
+    expect(result.current.isInitializing).toBe(false);
+    expect(result.current.user).toBeNull();
+  });
+
+  it('still refreshes when the server saw a refresh cookie it could not resolve', async () => {
+    refreshAccessToken.mockRejectedValue(new Error('rejected'));
+    hydrateAuth({ user: null, hasRefreshCookie: true });
+
+    const { result } = renderHook(() => useAuth(), {
+      wrapper: AuthProvider,
+    });
+
+    await waitFor(() => expect(result.current.isInitializing).toBe(false));
+    expect(refreshAccessToken).toHaveBeenCalledTimes(1);
+  });
+
+  it('still refreshes to obtain the access token for a server-resolved user', async () => {
+    const user = createAuthUser();
+    refreshAccessToken.mockResolvedValue({ accessToken: 'fresh', user });
+    hydrateAuth({ user, hasRefreshCookie: true });
+
+    const { result } = renderHook(() => useAuth(), {
+      wrapper: AuthProvider,
+    });
+
+    await waitFor(() => expect(result.current.accessToken).toBe('fresh'));
+    expect(refreshAccessToken).toHaveBeenCalledTimes(1);
   });
 
   it('adopts the refreshed session and stops initializing once the refresh resolves', async () => {

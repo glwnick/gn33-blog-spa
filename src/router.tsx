@@ -4,28 +4,35 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
 import { createIsomorphicFn } from '@tanstack/react-start';
 import { I18nextProvider } from 'react-i18next';
-import type { AuthUser } from '@/types/api-types.ts';
 
+import type { DehydratedAuth } from '@/lib/dehydrated-auth.ts';
 import { DefaultNotFound } from '@/components/default-not-found.tsx';
 import { ThemeProvider } from '@/context/theme-provider.tsx';
 import { AuthProvider } from '@/context/auth-provider.tsx';
 import { routeTree } from '@/routeTree.gen.ts';
 import { createQueryClient } from '@/lib/query-client.ts';
-import { getAuthSnapshot, updateAuthSnapshot } from '@/lib/auth-token.ts';
-import { getServerSessionSnapshot } from '@/lib/server-auth.ts';
+import { getAuthSnapshot } from '@/lib/auth-token.ts';
+import { hydrateAuth } from '@/lib/dehydrated-auth.ts';
+import {
+  getServerSessionSnapshot,
+  serverHasRefreshCookie,
+} from '@/lib/server-auth.ts';
 import { resolveServerNonce } from '@/lib/server-csp.ts';
 import sharedI18n from '@/lib/i18n.ts';
 import { createServerI18nInstance } from '@/lib/server-i18n.ts';
 import { Toaster } from '@/components/ui/sonner.tsx';
 
-type DehydratedAuth = { user: AuthUser | null };
-
 // `createIsomorphicFn` rather than a plain `import.meta.env.SSR` ternary: `lib/server-auth.ts` reaches into
 // `@tanstack/react-start/server`, which does not exist in a browser, and only this macro's compiler
 // transform - not a runtime branch a bundler has to prove dead - keeps that import out of the client build.
-const readServerSessionUser = createIsomorphicFn()
-  .client(() => null)
-  .server(() => getServerSessionSnapshot().user);
+const readServerAuth = createIsomorphicFn()
+  .client((): DehydratedAuth => ({ user: null, hasRefreshCookie: true }))
+  .server(
+    (): DehydratedAuth => ({
+      user: getServerSessionSnapshot().user,
+      hasRefreshCookie: serverHasRefreshCookie(),
+    }),
+  );
 
 // The client always reuses the one shared singleton (there is only ever one visitor per browser tab,
 // so nothing to isolate); the server gets a fresh instance per call - see `lib/server-i18n.ts`'s header
@@ -76,25 +83,13 @@ export function getRouter() {
     defaultStructuralSharing: true,
     defaultPreloadStaleTime: 0,
     defaultNotFoundComponent: () => <DefaultNotFound />,
-    // Slice 6b-2 (`plans/PLAN-slice-6b-auth-ssr.md`): seeds `lib/auth-token.ts`'s store from the
-    // server's resolved session before the client's first render, so an authenticated `_auth` page
-    // hydrates against the same `user` `AuthProvider` rendered on the server instead of the
-    // anonymous default. Deliberately `user` only, never the access token - see
-    // `lib/server-auth.ts`'s header for why the token must not enter the document.
-    dehydrate: (): DehydratedAuth => ({ user: readServerSessionUser() }),
-    hydrate: (dehydrated: DehydratedAuth) => {
-      // `isInitializing` stays `true`: `AuthProvider`'s own refresh effect still runs unchanged,
-      // supplies the real access token (which this seed never carried), and flips it to `false` -
-      // exactly what already happens on a normal client-only load, just against a warm `user`
-      // instead of a cold one.
-      if (dehydrated.user) {
-        updateAuthSnapshot({
-          user: dehydrated.user,
-          isInitializing: true,
-          accessToken: null,
-        });
-      }
-    },
+    // Slice 6b-2 (`plans/PLAN-slice-6b-auth-ssr.md`): seeds `lib/auth-token.ts`'s store from the server's
+    // resolved session before the client's first render, so an authenticated `_auth` page hydrates against
+    // the same `user` `AuthProvider` rendered on the server instead of the anonymous default. It carries the
+    // `user` and whether a refresh cookie existed, never the access token - see `lib/dehydrated-auth.ts`
+    // for what the client does with each and `lib/server-auth.ts`'s header for why the token stays out.
+    dehydrate: (): DehydratedAuth => readServerAuth(),
+    hydrate: hydrateAuth,
     // Replaces `main.tsx`'s old `InnerApp`/`AuthLoadingScreen` gate, which refused to mount
     // `RouterProvider` at all until the session refresh resolved. That gate is incompatible with
     // SSR (the server would always render the loading card) and with a router that must mount

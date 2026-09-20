@@ -3,6 +3,7 @@ import {
   getServerAccessToken,
   getServerSessionSnapshot,
   resolveServerSession,
+  serverHasRefreshCookie,
 } from './server-auth';
 import { createAuthUser } from '@/test/auth-fixtures';
 
@@ -158,5 +159,13 @@ describe('server-auth', () => {
     getRequest.mockReturnValue(requestB);
     expect(getServerAccessToken()).toBe('token-b');
     expect(getServerSessionSnapshot().user).toEqual(userB);
+  });
+
+  it('reports whether the request carried a refresh cookie', () => {
+    getCookie.mockReturnValue(undefined);
+    expect(serverHasRefreshCookie()).toBe(false);
+
+    getCookie.mockReturnValue('refresh-token-1');
+    expect(serverHasRefreshCookie()).toBe(true);
   });
 });

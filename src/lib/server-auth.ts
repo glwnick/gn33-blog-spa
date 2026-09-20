@@ -142,3 +142,12 @@ export function getServerSessionSnapshot(): AuthSnapshot {
     ANONYMOUS_SESSION.publicSnapshot
   );
 }
+
+/**
+ * Whether this request carried a refresh cookie at all. The cookie is httpOnly, so the browser cannot ask
+ * itself: `router.tsx` dehydrates this so the client can skip a `/v1/auth/refresh` it already knows the
+ * backend will answer with 400 "No refreshToken!" - a console error on every anonymous page load.
+ */
+export function serverHasRefreshCookie(): boolean {
+  return Boolean(getCookie('refreshToken'));
+}
